@@ -5,16 +5,20 @@ class ScalaZafiraClient(var url: String) {
 
   val zafiraClient = new ZafiraClient(url)
 
-  def login(username: String, password: String): Unit = {
+  def login(username: String, password: String) = {
     this.zafiraClient.login(username, password)
   }
 
-  def refreshToken(token: String): Unit = {
+  def refreshToken(token: String) = {
     this.zafiraClient.refreshToken(token)
   }
 
-  def createUser(user: UserType): Unit = {
+  def createUser(user: UserType) = {
     this.zafiraClient.createUser(user)
+  }
+
+  def setToken(token: String)= {
+    this.zafiraClient.setAuthToken("Bearer " + token)
   }
 
 }
