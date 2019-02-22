@@ -1,3 +1,5 @@
+package com.qaprosoft.reporter
+
 import com.typesafe.config.ConfigFactory
 
 import scala.util.Properties
@@ -5,7 +7,7 @@ import scala.util.Properties
 class Settings (fileNameOption: Option[String] = None) {
   val config = fileNameOption.fold(ifEmpty = ConfigFactory.load())(file => ConfigFactory.parseResources(file))
 
-  def envOrElseConfig(name: String): String = {
+  def envOrElseConfig(name: String): Any = {
     /**
       * load configurations in the following order:
       * 1) From properly named environment variables
