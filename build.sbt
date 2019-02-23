@@ -24,7 +24,7 @@ libraryDependencies ++= Seq(
     "com.sun.xml.bind" % "jaxb-impl" % "2.3.2",
     "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
     "javax.mail" % "mail" % "1.4",
-    "org.apache.commons" % "commons-io" % "1.3.2",
+    "commons-io" % "commons-io" % "2.6",
     "org.apache.httpcomponents" % "httpclient" % "4.5.7",
     "org.codehaus.jettison" % "jettison" % "1.4.0",
     "com.qaprosoft" % "zafira" % "3.3.50" pomOnly(),
