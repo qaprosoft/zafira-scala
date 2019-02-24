@@ -111,10 +111,8 @@ class ZafiraReporter extends Reporter with Util {
 
     // Register test suite along with suite owner
     val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
-    println(" ToString  " + event.configMap.iterator.toString())
-    println(" ToString  " + event.configMap)
 
-     suite = zafiraClient.registerTestSuite(StringUtils.substringAfterLast(FilenameUtils.getName(suiteFilePath), "."),FilenameUtils.getName(suiteFilePath), suiteOwner.getId)
+     suite = zafiraClient.registerTestSuite(event.threadName,event.threadName, suiteOwner.getId)
 
     // Register job that triggers test run
     val job: JobType = zafiraClient.registerJob(ciConfig.getCiUrl, suiteOwner.getId)
