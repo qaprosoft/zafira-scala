@@ -37,7 +37,7 @@ class ZafiraReporter extends Reporter with Util {
   val marshaller = JAXBContext.newInstance(classOf[ConfigurationType]).createMarshaller
   val configurator = Class.forName(ZAFIRA_CONFIGURATOR).newInstance.asInstanceOf[IConfigurator]
 
-  val suiteFilePath = "com.qaprosoft.reporter.suites.MySuite"
+  val suiteFilePath = "test"
 
   private val threadCiTestId = new ThreadLocal[String]
   private val threadTest = new ThreadLocal[TestType]
@@ -111,6 +111,8 @@ class ZafiraReporter extends Reporter with Util {
 
     // Register test suite along with suite owner
     val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
+    println(" ToString  " + event.configMap.iterator.toString())
+    println(" ToString  " + event.configMap)
 
      suite = zafiraClient.registerTestSuite(StringUtils.substringAfterLast(FilenameUtils.getName(suiteFilePath), "."),FilenameUtils.getName(suiteFilePath), suiteOwner.getId)
 
