@@ -72,19 +72,19 @@ trait Util {
   val JIRA_SUITE_ID = getStringParam(jira + jiraSuiteId, jiraSuiteId)
 
 
-  val ciConfig:CIConfig = {
-    val ci = new CIConfig
-    ci.setCiRunId(CI_RUN_ID)
-    ci.setCiUrl(CI_URL)
-    ci.setCiBuild(CI_BUILD)
-    ci.setCiBuildCause(CI_BUILD_CAUSE)
-    ci.setCiParentUrl(CI_PARENT_URL)
-    ci.setCiParentBuild(CI_PARENT_BUILD)
-
-    ci.setGitBranch(GIT_BRANCH)
-    ci.setGitCommit(GIT_COMMIT)
-    ci.setGitUrl(GIT_URL)
-    ci
-  }
+ // val ciConfig:CIConfig = {
+//    val ci = new CIConfig
+//    ci.setCiRunId(CI_RUN_ID)
+//    ci.setCiUrl(CI_URL)
+//    ci.setCiBuild(CI_BUILD)
+//    ci.setCiBuildCause(CI_BUILD_CAUSE)
+//    ci.setCiParentUrl(CI_PARENT_URL)
+//    ci.setCiParentBuild(CI_PARENT_BUILD)
+//
+//    ci.setGitBranch(GIT_BRANCH)
+//    ci.setGitCommit(GIT_COMMIT)
+//    ci.setGitUrl(GIT_URL)
+//    ci
+ // }
 
 }

@@ -8,7 +8,7 @@ import org.scalatest.events._
 import org.scalatest.Reporter
 import com.qaprosoft.zafira.client.ZafiraClient
 import com.qaprosoft.zafira.config.CIConfig.BuildCasue
-import com.qaprosoft.zafira.config.IConfigurator
+import com.qaprosoft.zafira.config.{CIConfig, IConfigurator}
 import com.qaprosoft.zafira.models.db.TestRun.Initiator
 import com.qaprosoft.zafira.models.dto.config.ConfigurationType
 import com.qaprosoft.zafira.models.dto.user.UserType
@@ -24,7 +24,7 @@ import com.qaprosoft.zafira.models.db.Status
 class ZafiraReporter extends Reporter with Util {
 
   private val LOGGER = LoggerFactory.getLogger(classOf[ZafiraReporter])
-
+  var ciConfig:CIConfig = null
   var parentJob: JobType = null
   var user: UserType = null
   var suite: TestSuiteType = null
