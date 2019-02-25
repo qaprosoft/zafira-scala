@@ -16,7 +16,7 @@ libraryDependencies ++= Seq(
     "com.typesafe" % "config" % "1.2.1",
     "org.seleniumhq.selenium" % "selenium-java" % "3.11.0" % "test",
     "org.apache.commons" % "commons-lang3" % "3.0",
-    "org.apache.commons" % "commons-configuration2" % "2.0",
+    "org.apache.commons" % "commons-configuration2" % "2.4",
     "org.slf4j" % "slf4j-ext" % "1.6.4",
     "org.slf4j" % "slf4j-log4j12" % "1.6.4",
     "org.slf4j" % "slf4j-nop" % "1.6.4",
@@ -29,5 +29,6 @@ libraryDependencies ++= Seq(
     "org.codehaus.jettison" % "jettison" % "1.4.0",
     "com.qaprosoft" % "zafira" % "3.3.50" pomOnly(),
     "com.qaprosoft" % "zafira-models" % "3.3.50",
-    "com.qaprosoft" % "zafira-client" % "3.3.50"
+    "com.qaprosoft" % "zafira-client" % "3.3.50",
+    "commons-beanutils" % "commons-beanutils" % "1.9.3"
 )

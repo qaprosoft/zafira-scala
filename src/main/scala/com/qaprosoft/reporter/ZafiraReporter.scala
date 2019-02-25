@@ -2,29 +2,26 @@ package com.qaprosoft.reporter
 
 import java.io.StringWriter
 import java.util
-import java.util.Date
+import java.util.{Date, UUID}
 
 import org.scalatest.events._
 import org.scalatest.Reporter
 import com.qaprosoft.zafira.client.ZafiraClient
-import com.qaprosoft.zafira.config.CIConfig.BuildCasue
-import com.qaprosoft.zafira.config.{CIConfig, IConfigurator}
+import com.qaprosoft.zafira.config.CIConfig._
+import com.qaprosoft.zafira.config._
 import com.qaprosoft.zafira.models.db.TestRun.Initiator
 import com.qaprosoft.zafira.models.dto.config.ConfigurationType
 import com.qaprosoft.zafira.models.dto.user.UserType
 import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.JAXBContext
-import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
-import java.util.UUID
-
 import com.qaprosoft.zafira.models.db.Status
 
 class ZafiraReporter extends Reporter with Util {
 
   private val LOGGER = LoggerFactory.getLogger(classOf[ZafiraReporter])
-  var ciConfig:CIConfig = null
+
   var parentJob: JobType = null
   var user: UserType = null
   var suite: TestSuiteType = null
@@ -81,12 +78,8 @@ class ZafiraReporter extends Reporter with Util {
         ZAFIRA_ENABLED = zc.isAvailable
         if (ZAFIRA_ENABLED) {
           val auth = zc.refreshToken(ZAFIRA_ACCESS_TOKEN)
-          if (auth.getStatus.equals(200)){
-            zc.setAuthToken(auth.getObject.getType + " " + auth.getObject.getAccessToken)
-          }
-          else {
-            ZAFIRA_ENABLED = false
-          }
+          if (auth.getStatus.equals(200)) zc.setAuthToken(auth.getObject.getType + " " + auth.getObject.getAccessToken)
+          else ZAFIRA_ENABLED = false
         }
         LOGGER.info("Zafira is " + (if (ZAFIRA_ENABLED) "available"
         else "unavailable"))
@@ -96,7 +89,6 @@ class ZafiraReporter extends Reporter with Util {
       case e: NoSuchElementException =>
         LOGGER.error("Unable to find config property: ", e)
     }
-    println(zc.toString)
     zc
   }
 
