@@ -29,5 +29,8 @@ libraryDependencies ++= Seq(
     "com.qaprosoft" % "zafira" % "3.3.50" pomOnly(),
     "com.qaprosoft" % "zafira-models" % "3.3.50",
     "com.qaprosoft" % "zafira-client" % "3.3.50",
-    "commons-beanutils" % "commons-beanutils" % "1.9.3"
+    "commons-beanutils" % "commons-beanutils" % "1.9.3",
+    "org.seleniumhq.selenium" % "selenium-java" % "3.11.0",
+    "commons-pool" % "commons-pool" % "1.6"
+
 )
