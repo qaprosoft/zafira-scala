@@ -139,7 +139,7 @@ trait Util {
   object seleniumGrid {
     lazy val enabled = sys.props.getOrElse("seleniumGrid.enabled", false.toString)
     lazy val protocol = sys.props.getOrElse("seleniumGrid.protocol", "http")
-    lazy val hostname = sys.props.getOrElse("seleniumGrid.hostname", "selenium-hub.intranet.solarmosaic.com")
+    lazy val hostname = sys.props.getOrElse("seleniumGrid.hostname", "selenium-hub")
     lazy val port = sys.props.getOrElse("seleniumGrid.port", "4444")
     lazy val webdriverPath = sys.props.getOrElse("seleniumGrid.webdriverPath", "/wd/hub")
     lazy val enableVideo = sys.props.getOrElse("seleniumGrid.enableVideo", false.toString)
