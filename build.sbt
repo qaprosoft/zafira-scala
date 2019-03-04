@@ -6,7 +6,6 @@ version := "0.1"
 scalaVersion := "2.12.7"
 
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-C", "com.qaprosoft.reporter.ZafiraReporter")
-javaOptions ++= Seq("-Dconfig.file=src/main/resources/conf/local.conf")
 
 libraryDependencies ++= Seq(
     "org.scalatest" % "scalatest_2.12" % "3.0.5",
