@@ -20,7 +20,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
   lazy val seleniumGridConfig = seleniumGrid
 
   object seleniumGrid {
-    lazy val enabled = sys.props.getOrElse("seleniumGrid.enabled", false.toString)
+    lazy val enabled = sys.props.getOrElse("seleniumGrid.enabled", true.toString)
     lazy val protocol = sys.props.getOrElse("seleniumGrid.protocol", "http")
     lazy val hostname = sys.props.getOrElse("seleniumGrid.hostname", "selenium-hub.intranet.solarmosaic.com")
 
