@@ -20,16 +20,9 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
   lazy val seleniumGridConfig = seleniumGrid
 
   object seleniumGrid {
-    lazy val enabled = sys.props.getOrElse("seleniumGrid.enabled", true.toString)
-    lazy val protocol = sys.props.getOrElse("seleniumGrid.protocol", "http")
-    lazy val hostname = sys.props.getOrElse("seleniumGrid.hostname", "selenium-hub.intranet.solarmosaic.com")
+    lazy val enabled = sys.props.getOrElse("seleniumGridEnabled", false.toString)
 
     lazy val selenium_url = sys.props.getOrElse("SELENIUM_URL", "http://qpsdemo:kqyQZC54WZ2A@stage.qaprosoft.com:4444/wd/hub")
-
-    lazy val port = sys.props.getOrElse("seleniumGrid.port", "4444")
-    lazy val webdriverPath = sys.props.getOrElse("seleniumGrid.webdriverPath", "/wd/hub")
-    lazy val enableVideo = sys.props.getOrElse("seleniumGrid.enableVideo", false.toString)
-    lazy val enableVnc = sys.props.getOrElse("seleniumGrid.enableVnc", false.toString)
   }
   var number = 0
 
@@ -45,8 +38,6 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
         options.addArguments("--disable-gpu")
         capability.setCapability(ChromeOptions.CAPABILITY, options)
         capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true)
-        capability.setCapability("enableVideo", seleniumGrid.enableVideo.toBoolean)
-        capability.setCapability("enableVNC", seleniumGrid.enableVnc.toBoolean)
 
         try {
           suiteLogger.info("Try to create Grid WebDriver.")
@@ -109,9 +100,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
   def logSelenoidVncLink(remoteWebDriver: RemoteWebDriver ) = {
     val rawSessionId = remoteWebDriver.getSessionId.toString
     println(s"UI Session ID: $rawSessionId")
-    println("\n\n\n========== Selenoid Ui ===========================================")
-    println(s"http://selenoid-dl.agiletest.joinmosaic.com:8080/#/sessions/$rawSessionId")
-    println("=====================================================================\n\n\n")
+
   }
 
 
