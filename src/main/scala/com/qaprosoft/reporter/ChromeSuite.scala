@@ -24,9 +24,9 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
     lazy val protocol = sys.props.getOrElse("seleniumGrid.protocol", "http")
     lazy val hostname = sys.props.getOrElse("seleniumGrid.hostname", "selenium-hub.intranet.solarmosaic.com")
 
-    lazy val selenium_url = sys.props.getOrElse("seleniumGrid.port", "http://qpsdemo:kqyQZC54WZ2A@stage.qaprosoft.com:4444/wd/hub")
+    lazy val selenium_url = sys.props.getOrElse("SELENIUM_URL", "http://qpsdemo:kqyQZC54WZ2A@stage.qaprosoft.com:4444/wd/hub")
 
-    lazy val port = sys.props.getOrElse("SELENIUM_URL", "4444")
+    lazy val port = sys.props.getOrElse("seleniumGrid.port", "4444")
     lazy val webdriverPath = sys.props.getOrElse("seleniumGrid.webdriverPath", "/wd/hub")
     lazy val enableVideo = sys.props.getOrElse("seleniumGrid.enableVideo", false.toString)
     lazy val enableVnc = sys.props.getOrElse("seleniumGrid.enableVnc", false.toString)
