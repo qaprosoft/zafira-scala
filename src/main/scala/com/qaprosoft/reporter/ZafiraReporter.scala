@@ -256,7 +256,7 @@ class ZafiraReporter extends Reporter with Util {
       println("before startedTest == null")
       if (startedTest == null) { //new test run registration
         println("startedTest == null")
-        val testArgs = "testArgs"
+        val testArgs = event.testName
         var group = event.suiteClassName.get
         group = group.substring(0, group.lastIndexOf("."))
         val dependsOnMethods = null
@@ -270,9 +270,7 @@ class ZafiraReporter extends Reporter with Util {
       registeredTests.put(testName, startedTest)
       println("00")
     } catch {
-      //-Dci_build=16
       case e: SkipException =>
-        println("SkipException")
       case e: Throwable =>
         LOGGER.error("Undefined error during test case/method start!", e)
         println(e.printStackTrace())
