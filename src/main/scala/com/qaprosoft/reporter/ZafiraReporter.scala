@@ -262,12 +262,13 @@ class ZafiraReporter extends Reporter with Util {
         val dependsOnMethods = null
         startedTest = zafiraClient.registerTestStart(testName, group, Status.IN_PROGRESS, testArgs, run.getId, testCase.getId, 0, convertToXML(configurator.getConfiguration), dependsOnMethods, getThreadCiTestId, configurator.getTestTags(null))
       }
-      println("-")
+      println("startedTest.getId " + startedTest.getId)
       zafiraClient.registerWorkItems(startedTest.getId, configurator.getTestWorkItems(null))
+      println("startedTest " + startedTest.toString)
       println("=")
       threadTest.set(startedTest)
       println("+")
-      registeredTests.put(testName, startedTest)
+      registeredTests.put(event.testName, startedTest)
       println("00")
     } catch {
       case e: SkipException =>
