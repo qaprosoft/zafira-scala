@@ -1,26 +1,8 @@
 package com.qaprosoft.reporter
 
-import java.util
-
-import com.typesafe.config.ConfigFactory
-import org.apache.commons.configuration2.CombinedConfiguration
-import org.apache.commons.configuration2.Configuration
-import org.apache.commons.configuration2.FileBasedConfiguration
-import org.apache.commons.configuration2.PropertiesConfiguration
-import org.apache.commons.configuration2.SystemConfiguration
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder
-import org.apache.commons.configuration2.builder.fluent.Parameters
-import org.apache.commons.configuration2.ex.ConfigurationException
-import org.apache.commons.configuration2.tree.MergeCombiner
-import java.util.{NoSuchElementException, UUID}
-
+import java.util.UUID
 import com.qaprosoft.zafira.config.CIConfig
-import org.apache.commons.pool.PoolableObjectFactory
-import org.apache.commons.pool.impl.GenericObjectPool
-import org.openqa.selenium.{By, WebDriver}
-import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.slf4j.ext.XLoggerFactory
-
 
 trait Util {
 
@@ -34,18 +16,18 @@ trait Util {
   val ZAFIRA_CONFIGURATOR = sys.props.getOrElse("zafira_configurator", "com.qaprosoft.zafira.config.DefaultConfigurator")
   val ZAFIRA_RUN_ID_PARAM = "zafira_run_id"
 
-    var CI_URL = sys.props.getOrElse("ci_url", "https://stage.qaprosoft.com/jenkins/job/ScalaTest/job/ScalaTest/")
-    val CI_RUN_ID = sys.props.getOrElse("ci_run_id", UUID.randomUUID.toString)
-    val CI_BUILD = sys.props.getOrElse("ci_build", null)
-    val CI_BUILD_CAUSE = sys.props.getOrElse("ci_build_cause", "MANUALTRIGGER")
-    val CI_PARENT_URL = sys.props.getOrElse("ci_parent_url", null)
-    val CI_PARENT_BUILD = sys.props.getOrElse("ci_parent_build", null)
+  var CI_URL = sys.props.getOrElse("ci_url", "https://stage.qaprosoft.com/jenkins/job/ScalaTest/job/ScalaTest/")
+  var CI_RUN_ID = sys.props.getOrElse("ci_run_id", UUID.randomUUID.toString)
+  var CI_BUILD = sys.props.getOrElse("ci_build", null)
+  var CI_BUILD_CAUSE = sys.props.getOrElse("ci_build_cause", "MANUALTRIGGER")
+  var CI_PARENT_URL = sys.props.getOrElse("ci_parent_url", null)
+  var CI_PARENT_BUILD = sys.props.getOrElse("ci_parent_build", null)
 
-    val GIT_BRANCH = sys.props.getOrElse("git_branch", "ddev")
-    val GIT_COMMIT = sys.props.getOrElse("git_commit", null)
-    val GIT_URL = sys.props.getOrElse("git_url", "https://github.com/qaprosoft/zafira-scala")
+  var GIT_BRANCH = sys.props.getOrElse("git_branch", "ddev")
+  var GIT_COMMIT = sys.props.getOrElse("git_commit", null)
+  var GIT_URL = sys.props.getOrElse("git_url", "https://github.com/qaprosoft/zafira-scala")
 
-    var JIRA_SUITE_ID = sys.props.getOrElse("ci_build", null)
+  var JIRA_SUITE_ID = sys.props.getOrElse("ci_build", null)
 
   val ciConfig: CIConfig = {
     val ci = new CIConfig
@@ -62,8 +44,6 @@ trait Util {
     ci
   }
 
-
   val suiteLogger = XLoggerFactory.getXLogger(this.getClass)
-
 
 }
