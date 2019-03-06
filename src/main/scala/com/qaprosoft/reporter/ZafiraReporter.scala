@@ -256,11 +256,7 @@ class ZafiraReporter extends Reporter with Util {
       println("before startedTest == null")
       if (startedTest == null) { //new test run registration
         println("startedTest == null")
-        println("payload " + event.payload.get)
-        println("formatter " + event.formatter.get)
-
-
-        val testArgs = event.payload.get.toString
+        val testArgs = "testArgs"
         var group = event.suiteClassName.get
         group = group.substring(0, group.lastIndexOf("."))
         val dependsOnMethods = null
