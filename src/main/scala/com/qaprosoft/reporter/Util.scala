@@ -55,7 +55,7 @@ trait Util {
   private val jira = "app.jira."
   private val jiraSuiteId = "jira_suite_id"
 
-  def getStringParam(path: String, property: String): String = {
+  def getStringParam(path: String, property: String) = {
     val param = System.getProperty(property)
     if (param != null) param
     else conf.getString(path)
@@ -78,7 +78,8 @@ trait Util {
 
   var CI_URL = getStringParam(ci + ciUrl, ciUrl)
   val CI_RUN_ID = getStringParam(ci + ciRunId, UUID.randomUUID.toString)
-  val CI_BUILD = getStringParam(ci + ciBuild, ciBuild)
+  val CI_BUILD = null
+  // = getStringParam(ci + ciBuild, ciBuild)
   val CI_BUILD_CAUSE = getStringParam(ci + ciBuildCause, ciBuildCause)
   val CI_PARENT_URL = getStringParam(ci + ciParentUrl, ciParentUrl)
   val CI_PARENT_BUILD = getStringParam(ci + ciParentBuild, ciParentBuild)
@@ -109,32 +110,32 @@ trait Util {
   val suiteLogger = XLoggerFactory.getXLogger(this.getClass)
 
 
-  //  val ciConfig:CIConfig = {
-  //
-  //      val config:CombinedConfiguration = new CombinedConfiguration(new MergeCombiner)
-  //      config.setThrowExceptionOnMissing(true)
-  //      config.addConfiguration(new SystemConfiguration)
-  //      config.addConfiguration(
-  //        new FileBasedConfigurationBuilder[FileBasedConfiguration](classOf[PropertiesConfiguration])
-  //          .configure(new Parameters().properties.setFileName(ZAFIRA_PROPERTIES))
-  //          .getConfiguration)
-  //
-  //      val ci = new CIConfig
-  //      ci.setCiRunId(config.getString("ci_run_id", UUID.randomUUID.toString))
-  //      ci.setCiUrl(config.getString("ci_url", "http://localhost:8080/job/unavailable"))
-  //      ci.setCiBuild(config.getString("ci_build", null))
-  //      ci.setCiBuildCause(config.getString("ci_build_cause", "MANUALTRIGGER"))
-  //      ci.setCiParentUrl(config.getString("ci_parent_url", null))
-  //      ci.setCiParentBuild(config.getString("ci_parent_build", null))
-  //
-  //      ci.setGitBranch(config.getString("git_branch", null))
-  //      ci.setGitCommit(config.getString("git_commit", null))
-  //      ci.setGitUrl(config.getString("git_url", null))
-  //
-  //      JIRA_SUITE_ID = config.getString("jira_suite_id", null)
-  //
-  //    ci
-  //  }
+//    val ciConfig:CIConfig = {
+//
+//        val config:CombinedConfiguration = new CombinedConfiguration(new MergeCombiner)
+//        config.setThrowExceptionOnMissing(true)
+//        config.addConfiguration(new SystemConfiguration)
+//        config.addConfiguration(
+//          new FileBasedConfigurationBuilder[FileBasedConfiguration](classOf[PropertiesConfiguration])
+//            .configure(new Parameters().properties.setFileName(ZAFIRA_PROPERTIES))
+//            .getConfiguration)
+//
+//        val ci = new CIConfig
+//        ci.setCiRunId(config.getString("ci_run_id", UUID.randomUUID.toString))
+//        ci.setCiUrl(config.getString("ci_url", "http://localhost:8080/job/unavailable"))
+//        ci.setCiBuild(config.getString("ci_build", null))
+//        ci.setCiBuildCause(config.getString("ci_build_cause", "MANUALTRIGGER"))
+//        ci.setCiParentUrl(config.getString("ci_parent_url", null))
+//        ci.setCiParentBuild(config.getString("ci_parent_build", null))
+//
+//        ci.setGitBranch(config.getString("git_branch", null))
+//        ci.setGitCommit(config.getString("git_commit", null))
+//        ci.setGitUrl(config.getString("git_url", null))
+//
+//        JIRA_SUITE_ID = config.getString("jira_suite_id", null)
+//
+//      ci
+//    }
 
 
 }
