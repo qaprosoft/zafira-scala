@@ -152,15 +152,9 @@ class ZafiraReporter extends Reporter with Util {
         case BuildCasue.SCMTRIGGER =>
           run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
         case BuildCasue.MANUALTRIGGER =>
-          println("1" + suite.getId)
-          println("2" + job.getId)
-          println("3" + convertToXML(configurator.getConfiguration))
-          println("4" + user.getId)
-
           run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
           println("run exist ")
         case _ =>
-          println("RuntimeException")
           throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
       }
     }
@@ -169,9 +163,14 @@ class ZafiraReporter extends Reporter with Util {
       println("run == null")
       throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL)
     }
-    else
+    else {
+      println("run set param")
       System.setProperty(ZAFIRA_RUN_ID_PARAM, run.getId.toString)
+      println(run.getId.toString)
+    }
+    println("herer")
     Runtime.getRuntime.addShutdownHook(new TestRunShutdownHook(zafiraClient, run))
+    println("here1")
 
   } catch {
     case e: Throwable =>
