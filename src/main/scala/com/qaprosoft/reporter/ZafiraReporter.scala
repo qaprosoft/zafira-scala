@@ -274,11 +274,12 @@ class ZafiraReporter extends Reporter with Util {
       registeredTests.put(testName, startedTest)
       println("00")
     } catch {
+      //-Dci_build=16
       case e: SkipException =>
         println("SkipException")
       case e: Throwable =>
         LOGGER.error("Undefined error during test case/method start!", e)
-        println("9")
+        println(e.printStackTrace())
     }
   }
 
