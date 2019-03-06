@@ -29,7 +29,7 @@ class ZafiraReporter extends Reporter with Util {
   var run:TestRunType = null
   var test:TestType = null
   var testRunResults: util.List[TestType] = null
-  var registeredTests: util.Map[String, TestType] = null
+  var registeredTests: util.Map[String, TestType] = new util.HashMap[String, TestType]
 
   var classesToRerun: util.HashSet[String] = null
   val marshaller = JAXBContext.newInstance(classOf[ConfigurationType]).createMarshaller
