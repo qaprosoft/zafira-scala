@@ -255,8 +255,9 @@ class ZafiraReporter extends Reporter with Util {
       }
 
       if (startedTest == null) { //new test run registration
-        println("payload " + event.payload.get.toString)
-        println("formatter " + event.formatter.get.toString)
+        println("startedTest == null")
+        println("payload " + event.payload.get)
+        println("formatter " + event.formatter.get)
 
 
         val testArgs = event.payload.get.toString
