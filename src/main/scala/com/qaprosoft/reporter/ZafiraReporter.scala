@@ -17,6 +17,7 @@ import javax.xml.bind.JAXBContext
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import com.qaprosoft.zafira.models.db.Status
+import org.testng.SkipException
 
 class ZafiraReporter extends Reporter with Util {
 
@@ -241,8 +242,8 @@ class ZafiraReporter extends Reporter with Util {
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
       // Search already registered test!
       println("4")
-      println("size " + registeredTests.size())
-      
+      println("size " + registeredTests.isEmpty.toString)
+
       if (registeredTests.containsKey(testName)) {
         println("5")
         startedTest = registeredTests.get(testName)
@@ -256,8 +257,11 @@ class ZafiraReporter extends Reporter with Util {
       }
 
       if (startedTest == null) { //new test run registration
-        println("7")
-        val testArgs = null
+        println("payload " + event.payload.get.toString)
+        println("formatter " + event.formatter.get.toString)
+
+
+        val testArgs = event.payload.get.toString
         var group = event.suiteClassName.get
         group = group.substring(0, group.lastIndexOf("."))
         val dependsOnMethods = null
@@ -271,6 +275,8 @@ class ZafiraReporter extends Reporter with Util {
       registeredTests.put(testName, startedTest)
       println("00")
     } catch {
+      case e: SkipException =>
+        println("SkipException")
       case e: Throwable =>
         LOGGER.error("Undefined error during test case/method start!", e)
         println("9")
