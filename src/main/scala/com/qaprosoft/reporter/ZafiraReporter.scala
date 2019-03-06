@@ -241,7 +241,8 @@ class ZafiraReporter extends Reporter with Util {
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
       // Search already registered test!
       println("4")
-
+      println("size " + registeredTests.size())
+      
       if (registeredTests.containsKey(testName)) {
         println("5")
         startedTest = registeredTests.get(testName)
