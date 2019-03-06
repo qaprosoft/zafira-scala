@@ -168,10 +168,7 @@ class ZafiraReporter extends Reporter with Util {
       System.setProperty(ZAFIRA_RUN_ID_PARAM, run.getId.toString)
       println(run.getId.toString)
     }
-    println("herer")
     Runtime.getRuntime.addShutdownHook(new TestRunShutdownHook(zafiraClient, run))
-    println("here1")
-
   } catch {
     case e: Throwable =>
       ZAFIRA_ENABLED = false
@@ -230,19 +227,21 @@ class ZafiraReporter extends Reporter with Util {
 
       var startedTest:TestType = null
       val testName = event.testName
+
       // If method owner is not specified then try to use suite owner. If both are not declared then ANONYMOUS will be used.
       val primaryOwnerName:String = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER).getUsername
       val primaryOwner: UserType= zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
 
       val secondaryOwnerName:String  =  zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER).getUsername
       val secondaryOwner: UserType =  zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
-      println("1")
+      println("event.testName " + event.testName)
       val testClass = event.suiteClassName.get
       val testMethod = event.testName
 
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
       // Search already registered test!
       println("4")
+
       if (registeredTests.containsKey(testName)) {
         println("5")
         startedTest = registeredTests.get(testName)
@@ -254,7 +253,7 @@ class ZafiraReporter extends Reporter with Util {
         startedTest.setTags(null)
         startedTest = zafiraClient.registerTestRestart(startedTest)
       }
-      //println("6")
+
       if (startedTest == null) { //new test run registration
         println("7")
         val testArgs = null
@@ -263,10 +262,13 @@ class ZafiraReporter extends Reporter with Util {
         val dependsOnMethods = null
         startedTest = zafiraClient.registerTestStart(testName, group, Status.IN_PROGRESS, testArgs, run.getId, testCase.getId, 0, convertToXML(configurator.getConfiguration), dependsOnMethods, getThreadCiTestId, configurator.getTestTags(null))
       }
+      println("-")
       zafiraClient.registerWorkItems(startedTest.getId, configurator.getTestWorkItems(null))
+      println("=")
       threadTest.set(startedTest)
+      println("+")
       registeredTests.put(testName, startedTest)
-      println("8")
+      println("00")
     } catch {
       case e: Throwable =>
         LOGGER.error("Undefined error during test case/method start!", e)
