@@ -264,7 +264,6 @@ class ZafiraReporter extends Reporter with Util {
       }
       println("startedTest.getId " + startedTest.getId)
       zafiraClient.registerWorkItems(startedTest.getId, configurator.getTestWorkItems(null))
-      println("startedTest " + startedTest.toString)
       println("=")
       threadTest.set(startedTest)
       println("+")
