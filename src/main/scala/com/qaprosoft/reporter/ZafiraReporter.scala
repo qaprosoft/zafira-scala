@@ -13,7 +13,7 @@ import com.qaprosoft.zafira.models.db.TestRun.Initiator
 import com.qaprosoft.zafira.models.dto.config.ConfigurationType
 import com.qaprosoft.zafira.models.dto.user.UserType
 import com.qaprosoft.zafira.models.dto._
-import javax.xml.bind.JAXBContext
+import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import com.qaprosoft.zafira.models.db.Status
@@ -28,7 +28,7 @@ class ZafiraReporter extends Reporter with Util {
   var suite: TestSuiteType = null
   var run:TestRunType = null
   var test:TestType = null
-  var testRunResults: util.List[TestType] = null
+  var testRunResults: util.List[TestType] = new  util.ArrayList[TestType]
   var registeredTests: util.Map[String, TestType] = new util.HashMap[String, TestType]
 
   var classesToRerun: util.HashSet[String] = null
@@ -46,7 +46,7 @@ class ZafiraReporter extends Reporter with Util {
     event match {
 
       case event: TestStarting => onTestStart(event)
-      case event: TestSucceeded => println(event.testName + "\n...test succeeded")
+      case event: TestSucceeded => onTestSuccess(event)
       case event: TestIgnored => println(event.testName + "\n...test ignored")
       case event: TestPending => println(event.testName + "\n...test pending")
       case event: TestFailed => println(event.testName + "\n...test failed")
@@ -118,9 +118,7 @@ class ZafiraReporter extends Reporter with Util {
       val response = zafiraClient.getTestRunByCiRunId(ciConfig.getCiRunId)
       run = response.getObject
     }
-    println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     if (run != null) {
-      println("run != null")
       // Already discovered run with the same CI_RUN_ID, it is re-run functionality!
       // Reset build number for re-run to map to the latest rerun build
       run.setBuildNumber(ciConfig.getCiBuild)
@@ -253,22 +251,16 @@ class ZafiraReporter extends Reporter with Util {
 //        startedTest.setTags(null)
 //        startedTest = zafiraClient.registerTestRestart(startedTest)
 //      }
-      println("before startedTest == null")
       if (startedTest == null) { //new test run registration
-        println("startedTest == null")
         val testArgs = event.testName
         var group = event.suiteClassName.get
         group = group.substring(0, group.lastIndexOf("."))
         val dependsOnMethods = null
         startedTest = zafiraClient.registerTestStart(testName, group, Status.IN_PROGRESS, testArgs, run.getId, testCase.getId, 0, convertToXML(configurator.getConfiguration), dependsOnMethods, getThreadCiTestId, configurator.getTestTags(null))
       }
-      println("startedTest.getId " + startedTest.getId)
       zafiraClient.registerWorkItems(startedTest.getId, configurator.getTestWorkItems(null))
-      println("=")
       threadTest.set(startedTest)
-      println("+")
       registeredTests.put(event.testName, startedTest)
-      println("00")
     } catch {
       case e: SkipException =>
       case e: Throwable =>
@@ -282,6 +274,40 @@ class ZafiraReporter extends Reporter with Util {
   val getThreadCiTestId: String = {
     if (StringUtils.isEmpty(threadCiTestId.get)) threadCiTestId.set(UUID.randomUUID.toString)
     threadCiTestId.get
+  }
+
+  def onTestSuccess(event: TestSucceeded): Unit = {
+    if (!ZAFIRA_ENABLED) return
+    try {
+      val rs = zafiraClient.finishTest(populateTestResult(event.testName, Status.PASSED, null))
+      if ((!rs.getStatus.equals(200)) && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
+    } catch {
+      case e: Throwable =>
+        LOGGER.error("Undefined error during test case/method finish!", e)
+    }
+  }
+
+  @throws[JAXBException]
+  private def populateTestResult(testName:String, status: Status, message: String):TestType = {
+    val threadId = Thread.currentThread.getId
+    val test = threadTest.get
+    //testByThread.get(threadId);
+    val finishTime = new Date().getTime
+
+    LOGGER.debug("testName registered with current thread is: " + testName)
+    if (test == null) throw new RuntimeException("Unable to find TestType result to mark test as finished! name: '" + testName + "'; threadId: " + threadId)
+    test.setTestMetrics(configurator.getTestMetrics(null))
+    test.setConfigXML(convertToXML(configurator.getConfiguration))
+    test.setArtifacts(configurator.getArtifacts(null))
+//    var testDetails = "testId: %d; testCaseId: %d; testRunId: %d; name: %s; thread: %s; status: %s, finishTime: %s \n message: %s"
+//    var logMessage = String.format(testDetails, test.getId, test.getTestCaseId, test.getTestRunId, test.getName, threadId, status, finishTime, message)
+ //   LOGGER.debug("Test details to finish registration:" + logMessage)
+    test.setStatus(status)
+    test.setMessage(message)
+    test.setFinishTime(finishTime)
+    threadTest.remove
+    threadCiTestId.remove
+    test
   }
 
 
