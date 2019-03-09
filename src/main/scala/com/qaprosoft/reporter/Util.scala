@@ -16,7 +16,8 @@ trait Util {
   val ZAFIRA_CONFIGURATOR = sys.props.getOrElse("zafira_configurator", "com.qaprosoft.zafira.config.DefaultConfigurator")
   val ZAFIRA_RUN_ID_PARAM = "zafira_run_id"
 
-  var CI_URL = sys.props.getOrElse("ci_url", "https://stage.qaprosoft.com/jenkins/job/ScalaTest/job/ScalaTest/")
+  var CI_URL = sys.props.getOrElse("ci_url",null)
+ // var CI_URL = sys.props.getOrElse("ci_url", "https://stage.qaprosoft.com/jenkins/job/ScalaTest/job/ScalaTest/")
   var CI_RUN_ID = sys.props.getOrElse("ci_run_id", UUID.randomUUID.toString)
   var CI_BUILD = sys.props.getOrElse("ci_build", null)
   var CI_BUILD_CAUSE = sys.props.getOrElse("ci_build_cause", "MANUALTRIGGER")
