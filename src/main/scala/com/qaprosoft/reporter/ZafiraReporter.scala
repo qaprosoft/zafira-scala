@@ -287,8 +287,19 @@ class ZafiraReporter extends Reporter with Util {
     }
   }
 
+  def onTestFailure(event: TestFailed): Unit = {
+    if (!ZAFIRA_ENABLED) return
+    try {
+      val rs = zafiraClient.finishTest(populateTestResult(event.testName, Status.FAILED, null))
+      if ((!rs.getStatus.equals(200))  && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
+    } catch {
+      case e: Throwable =>
+        LOGGER.error("Undefined error during test case/method finish!", e)
+    }
+  }
+
   @throws[JAXBException]
-  private def populateTestResult(testName:String, status: Status, message: String):TestType = {
+  private def populateTestResult(testName:String, status: Status, message: String) = {
     val threadId = Thread.currentThread.getId
     val test = threadTest.get
     //testByThread.get(threadId);
