@@ -49,7 +49,7 @@ class ZafiraReporter extends Reporter with Util {
       case event: TestSucceeded => onTestSuccess(event)
       case event: TestIgnored => println(event.testName + "\n...test ignored")
       case event: TestPending => println(event.testName + "\n...test pending")
-      case event: TestFailed => println(event.testName + "\n...test failed")
+      case event: TestFailed => onTestFailure(event)
 
       case event: SuiteStarting =>  println(event.suiteName + "\n...suite starting")
       case event: SuiteCompleted => println(event.suiteName + "\n...suite completed")
