@@ -1,16 +1,12 @@
 package com.qaprosoft.reporter.tests
 
-import org.openqa.selenium._
-import org.openqa.selenium.chrome.ChromeDriver
+import com.qaprosoft.reporter.ChromeSuite
 import org.scalatest._
-import org.scalatest.selenium.WebBrowser
 
-class CheeseTest extends FunSuite with WebBrowser {
+class CheeseTest extends FunSuite with ChromeSuite {
 
-  implicit val webDriver: WebDriver = new ChromeDriver
   val host = "http://www.google.com/"
 
-  //Create tests with custom hook to have report
   test("Cheese!") {
     go to (host)
 
