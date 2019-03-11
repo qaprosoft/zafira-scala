@@ -292,19 +292,20 @@ class ZafiraReporter extends Reporter with Util {
   private def populateTestResult(event:Event, status: Status) = {
     var testName:String = null
     var message:String = null
-    var duration:Long = 0L
+    //var duration:Long = 0L
+    var finishTime = 0L
 
     event match {
       case event: TestFailed => {
         testName = event.testName
         message = event.message
-        duration = event.timeStamp
-        println("duration " + duration)
+        finishTime = event.timeStamp
+
       }
       case event: TestSucceeded => {
         testName = event.testName
-        duration = event.timeStamp
-        println("duration " + duration)
+        finishTime = event.timeStamp
+        
         message = "test succeed"
       }
     }
@@ -312,7 +313,7 @@ class ZafiraReporter extends Reporter with Util {
     val threadId = Thread.currentThread.getId
     val test = threadTest.get
     //testByThread.get(threadId);
-    val finishTime = new Date().getTime
+
 
     LOGGER.debug("testName registered with current thread is: " + testName)
     if (test == null) throw new RuntimeException("Unable to find TestType result to mark test as finished! name: '" + testName + "'; threadId: " + threadId)
