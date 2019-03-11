@@ -298,7 +298,7 @@ class ZafiraReporter extends Reporter with Util {
     event match {
       case event: TestFailed => {
         testName = event.testName
-        message = event.message
+        message = getFullStackTrace(event)
         finishTime = event.timeStamp
 
       }
@@ -331,18 +331,19 @@ class ZafiraReporter extends Reporter with Util {
   }
 
   private def getFullStackTrace(event: TestFailed) = {
-    val sb = new StringBuilder
-    if (event.throwable.get == null) {
-      sb.append(event.throwable.get.getMessage).append("\n")
-      val elems = event.throwable.get.getStackTrace
-      for (elem <- elems) {
-        sb.append("\n").append(elem.toString)
-      }
-    }
-    if (!StringUtils.isEmpty(sb.toString)) sb.toString
-    else null
-  }
 
+        val sb = new StringBuilder
+        if (event.throwable.get == null) {
+          sb.append(event.throwable.get.getMessage).append("\n")
+          val elems = event.throwable.get.getStackTrace
+          for (elem <- elems) {
+            sb.append("\n").append(elem.toString)
+          }
+        }
+        if (!StringUtils.isEmpty(sb.toString)) sb.toString
+        else null
+
+  }
 
 }
 
