@@ -334,10 +334,10 @@ class ZafiraReporter extends Reporter with Util {
     println("getFullStackTrace 1")
     val sb = new StringBuilder
     println("getFullStackTrace 2")
-    if (event.throwable.get == null) {
+    if (event.throwable.get != null) {
       println("getFullStackTrace 3")
 
-      sb.append(event.throwable.get.getMessage).append("\n")
+      sb.append(event.message).append("\n")
       println("getFullStackTrace 4")
       val elems = event.throwable.get.getStackTrace
       println("getFullStackTrace 5")
