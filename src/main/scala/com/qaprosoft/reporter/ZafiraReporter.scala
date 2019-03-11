@@ -92,79 +92,79 @@ class ZafiraReporter extends Reporter with Util {
   }
 
   def onStart(event: RunStarting): Unit = {
-  // Exit on initialization failure
-  if (!ZAFIRA_ENABLED) return
-  try {
+    // Exit on initialization failure
+    if (!ZAFIRA_ENABLED) return
+    try {
 
-    zafiraClient.initProject(ZAFIRA_PROJECT)
-    val user = zafiraClient.getUserProfile.getObject
+      zafiraClient.initProject(ZAFIRA_PROJECT)
+      val user = zafiraClient.getUserProfile.getObject
 
-    val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
+      val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
 
-     suite = zafiraClient.registerTestSuite("Test suite",event.threadName, suiteOwner.getId)
+      suite = zafiraClient.registerTestSuite("Test suite",event.threadName, suiteOwner.getId)
 
-    val job: JobType = zafiraClient.registerJob(ciConfig.getCiUrl, suiteOwner.getId)
+      val job: JobType = zafiraClient.registerJob(ciConfig.getCiUrl, suiteOwner.getId)
 
-    // Register upstream job if required
-    var anonymous: UserType = null
-    if (BuildCasue.UPSTREAMTRIGGER == ciConfig.getCiBuildCause) {
-      anonymous = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
-      parentJob = zafiraClient.registerJob(ciConfig.getCiParentUrl, anonymous.getId)
-    }
-    // Searching for existing test run with same CI run id in case of rerun
-    if (!StringUtils.isEmpty(ciConfig.getCiRunId)) {
-      val response = zafiraClient.getTestRunByCiRunId(ciConfig.getCiRunId)
-      run = response.getObject
-    }
-    if (run != null) {
-      // Already discovered run with the same CI_RUN_ID, it is re-run functionality!
-      // Reset build number for re-run to map to the latest rerun build
-      run.setBuildNumber(ciConfig.getCiBuild)
+      // Register upstream job if required
+      var anonymous: UserType = null
+      if (BuildCasue.UPSTREAMTRIGGER == ciConfig.getCiBuildCause) {
+        anonymous = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
+        parentJob = zafiraClient.registerJob(ciConfig.getCiParentUrl, anonymous.getId)
+      }
+      // Searching for existing test run with same CI run id in case of rerun
+      if (!StringUtils.isEmpty(ciConfig.getCiRunId)) {
+        val response = zafiraClient.getTestRunByCiRunId(ciConfig.getCiRunId)
+        run = response.getObject
+      }
+      if (run != null) {
+        // Already discovered run with the same CI_RUN_ID, it is re-run functionality!
+        // Reset build number for re-run to map to the latest rerun build
+        run.setBuildNumber(ciConfig.getCiBuild)
 
-      // Reset testRun config for rerun in case of queued tests
-      run.setConfigXML(convertToXML(configurator.getConfiguration))
+        // Reset testRun config for rerun in case of queued tests
+        run.setConfigXML(convertToXML(configurator.getConfiguration))
 
-      // Re-register test run to reset status onto in progress
-      val response = zafiraClient.startTestRun(run)
-      run = response.getObject
-      testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.List[TestType]]
-      testRunResults.forEach({test => registeredTests.put(test.getName, test)
-        if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
+        // Re-register test run to reset status onto in progress
+        val response = zafiraClient.startTestRun(run)
+        run = response.getObject
+        testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.List[TestType]]
+        testRunResults.forEach({test => registeredTests.put(test.getName, test)
+          if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
         })
-      if (ZAFIRA_RERUN_FAILURES) LOGGER.info("It is has not implemented for scala yet") //ExcludeTestsForRerun.excludeTestsForRerun(suiteContext, testRunResults, configurator);
-    }
-    else {
-      if (ZAFIRA_RERUN_FAILURES) {
-        LOGGER.error("Unable to find data in Zafira Reporting Service with CI_RUN_ID: '" + ciConfig.getCiRunId + "'.\n" + "Rerun failures featrure will be disabled!")
-        ZAFIRA_RERUN_FAILURES = false
+        if (ZAFIRA_RERUN_FAILURES) LOGGER.info("It is has not implemented for scala yet") //ExcludeTestsForRerun.excludeTestsForRerun(suiteContext, testRunResults, configurator);
       }
-      // Register new test run
-      ciConfig.getCiBuildCause match {
-        case BuildCasue.UPSTREAMTRIGGER =>
-          run = zafiraClient.registerTestRunUPSTREAM_JOB(suite.getId, convertToXML(configurator.getConfiguration), job.getId, parentJob.getId, ciConfig, Initiator.UPSTREAM_JOB, JIRA_SUITE_ID)
-        case BuildCasue.TIMERTRIGGER =>
-        case BuildCasue.SCMTRIGGER =>
-          run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
-        case BuildCasue.MANUALTRIGGER =>
-          run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
-        case _ =>
-          throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
+      else {
+        if (ZAFIRA_RERUN_FAILURES) {
+          LOGGER.error("Unable to find data in Zafira Reporting Service with CI_RUN_ID: '" + ciConfig.getCiRunId + "'.\n" + "Rerun failures featrure will be disabled!")
+          ZAFIRA_RERUN_FAILURES = false
+        }
+        // Register new test run
+        ciConfig.getCiBuildCause match {
+          case BuildCasue.UPSTREAMTRIGGER =>
+            run = zafiraClient.registerTestRunUPSTREAM_JOB(suite.getId, convertToXML(configurator.getConfiguration), job.getId, parentJob.getId, ciConfig, Initiator.UPSTREAM_JOB, JIRA_SUITE_ID)
+          case BuildCasue.TIMERTRIGGER =>
+          case BuildCasue.SCMTRIGGER =>
+            run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
+          case BuildCasue.MANUALTRIGGER =>
+            run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
+          case _ =>
+            throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
+        }
       }
-    }
 
-    if (run == null) {
-      throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL)
+      if (run == null) {
+        throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL)
+      }
+      else {
+        System.setProperty(ZAFIRA_RUN_ID_PARAM, run.getId.toString)
+        println(run.getId.toString)
+      }
+      Runtime.getRuntime.addShutdownHook(new TestRunShutdownHook(zafiraClient, run))
+    } catch {
+      case e: Throwable =>
+        ZAFIRA_ENABLED = false
+        LOGGER.error("Undefined error during test run registration!", e.printStackTrace())
     }
-    else {
-      System.setProperty(ZAFIRA_RUN_ID_PARAM, run.getId.toString)
-      println(run.getId.toString)
-    }
-    Runtime.getRuntime.addShutdownHook(new TestRunShutdownHook(zafiraClient, run))
-  } catch {
-    case e: Throwable =>
-      ZAFIRA_ENABLED = false
-      LOGGER.error("Undefined error during test run registration!", e.printStackTrace())
-  }
 
   }
 
@@ -231,17 +231,17 @@ class ZafiraReporter extends Reporter with Util {
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
       // Search already registered test!
       println("4")
-//      if (registeredTests.containsKey(testName)) {
-//        println("5")
-//        startedTest = registeredTests.get(testName)
-//        // Skip already passed tests if rerun failures enabled
-//        if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)
-//        startedTest.setFinishTime(null)
-//        startedTest.setStartTime(new Date().getTime)
-//        startedTest.setCiTestId(getThreadCiTestId)
-//        startedTest.setTags(null)
-//        startedTest = zafiraClient.registerTestRestart(startedTest)
-//      }
+      //      if (registeredTests.containsKey(testName)) {
+      //        println("5")
+      //        startedTest = registeredTests.get(testName)
+      //        // Skip already passed tests if rerun failures enabled
+      //        if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)
+      //        startedTest.setFinishTime(null)
+      //        startedTest.setStartTime(new Date().getTime)
+      //        startedTest.setCiTestId(getThreadCiTestId)
+      //        startedTest.setTags(null)
+      //        startedTest = zafiraClient.registerTestRestart(startedTest)
+      //      }
       if (startedTest == null) { //new test run registration
         val testArgs = event.testName
         var group = event.suiteClassName.get
@@ -319,9 +319,9 @@ class ZafiraReporter extends Reporter with Util {
     test.setTestMetrics(configurator.getTestMetrics(null))
     test.setConfigXML(convertToXML(configurator.getConfiguration))
     test.setArtifacts(configurator.getArtifacts(null))
-//    var testDetails = "testId: %d; testCaseId: %d; testRunId: %d; name: %s; thread: %s; status: %s, finishTime: %s \n message: %s"
-//    var logMessage = String.format(testDetails, test.getId, test.getTestCaseId, test.getTestRunId, test.getName, threadId, status, finishTime, message)
- //   LOGGER.debug("Test details to finish registration:" + logMessage)
+    //    var testDetails = "testId: %d; testCaseId: %d; testRunId: %d; name: %s; thread: %s; status: %s, finishTime: %s \n message: %s"
+    //    var logMessage = String.format(testDetails, test.getId, test.getTestCaseId, test.getTestRunId, test.getName, threadId, status, finishTime, message)
+    //   LOGGER.debug("Test details to finish registration:" + logMessage)
     test.setStatus(status)
     test.setMessage(message)
     test.setFinishTime(finishTime)
@@ -330,30 +330,33 @@ class ZafiraReporter extends Reporter with Util {
     test
   }
 
-  private def getFullStackTrace(event: TestFailed) = {
-        println("getFullStackTrace 1")
-        val sb = new StringBuilder
+  private def getFullStackTrace(event: TestFailed):String = {
+    println("getFullStackTrace 1")
+    val sb = new StringBuilder
     println("getFullStackTrace 2")
-        if (event.throwable.get == null) {
-          println("getFullStackTrace 3")
+    if (event.throwable.get == null) {
+      println("getFullStackTrace 3")
 
-          sb.append(event.throwable.get.getMessage).append("\n")
-          println("getFullStackTrace 4")
-          val elems = event.throwable.get.getStackTrace
-          println("getFullStackTrace 5")
-          for (elem <- elems) {
-            println("getFullStackTrace 6")
-            sb.append("\n").append(elem.toString)
-            println("getFullStackTrace 7")
-          }
-          println("getFullStackTrace 8")
-        }
+      sb.append(event.throwable.get.getMessage).append("\n")
+      println("getFullStackTrace 4")
+      val elems = event.throwable.get.getStackTrace
+      println("getFullStackTrace 5")
+      for (elem <- elems) {
+        println("getFullStackTrace 6")
+        sb.append("\n").append(elem.toString)
+        println("getFullStackTrace 7")
+      }
+      println("getFullStackTrace 8")
+    }
     println("getFullStackTrace 9")
-        if (!StringUtils.isEmpty(sb.toString)) sb.toString
-    println("getFullStackTrace 10")
-        else null
-    println("getFullStackTrace 11")
-
+    if (!StringUtils.isEmpty(sb.toString)) {
+      println("getFullStackTrace 10")
+      sb.toString
+    }
+    else {
+      println("getFullStackTrace 11")
+      null
+    }
   }
 
 }
