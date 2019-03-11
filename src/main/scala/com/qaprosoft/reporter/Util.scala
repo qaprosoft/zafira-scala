@@ -8,7 +8,7 @@ trait Util {
 
   var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).asInstanceOf[Boolean]
   val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", "https://stage.qaprosoft.farm/zafira-ws")
-  val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token","eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicGFzc3dvcmQiOiJzclZmUitMVWNhVGdJbFR1SURNVmNlL1EzVVlvbmNuOCIsInRlbmFudCI6InN0YWdlIiwiZXhwIjoxMzAzODY5OTU2MjJ9.tAVXNCOCbEisbo5Uvp73w-s1XsYGtDeKL2pbYBhSCFtEgNR7CW82CSAROOdb7iPkGyCA9f-b9AtFqeBt_ICDPg")
+  val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token","eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicGFzc3dvcmQiOiJkMjN0b3NtdWZwcjUrdnFxWWYzZ2xveS9yRzVQZStPaSIsInRlbmFudCI6InN0YWdlIiwiZXhwIjoxMzA0MDEzMjE3NjJ9.6CXYPBh7YmVgCN31tNIbyJUwMTYnKtmGUWDh1cERCFA2tYwYrr9ZWC7nHWvrl2O9kZHGWaQYaBCVlR0GWM30_w")
   val ZAFIRA_PROJECT = sys.props.getOrElse("zafira_project", "Scala")
   var ZAFIRA_RERUN_FAILURES = sys.props.getOrElse("zafira_rerun_failures", false).asInstanceOf[Boolean]
   val ZAFIRA_REPORT_EMAILS = sys.props.getOrElse("zafira_report_emails", false).asInstanceOf[Boolean]
