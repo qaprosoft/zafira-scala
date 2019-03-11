@@ -25,10 +25,10 @@ trait Util {
   var CI_PARENT_BUILD = sys.props.getOrElse("ci_parent_build", null)
 
   var GIT_BRANCH = sys.props.getOrElse("git_branch", "reporter")
-  var GIT_COMMIT = sys.props.getOrElse("git_commit", "")
+  var GIT_COMMIT = sys.props.getOrElse("git_commit", null)
   var GIT_URL = sys.props.getOrElse("git_url", "https://github.com/qaprosoft/zafira-scala")
 
-  var JIRA_SUITE_ID = sys.props.getOrElse("ci_build", null)
+  var JIRA_SUITE_ID = sys.props.getOrElse("jira_suite_id", null)
 
   val ciConfig: CIConfig = {
     val ci = new CIConfig

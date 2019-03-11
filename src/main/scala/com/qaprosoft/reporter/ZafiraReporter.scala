@@ -31,11 +31,9 @@ class ZafiraReporter extends Reporter with Util {
   var testRunResults: util.List[TestType] = new  util.ArrayList[TestType]
   var registeredTests: util.Map[String, TestType] = new util.HashMap[String, TestType]
 
-  var classesToRerun: util.HashSet[String] = null
+  var classesToRerun: util.Set[String] = new util.HashSet[String]
   val marshaller = JAXBContext.newInstance(classOf[ConfigurationType]).createMarshaller
   val configurator = Class.forName(ZAFIRA_CONFIGURATOR).newInstance.asInstanceOf[IConfigurator]
-
-  val suiteFilePath = "test"
 
   private val threadCiTestId = new ThreadLocal[String]
   private val threadTest = new ThreadLocal[TestType]
@@ -151,7 +149,7 @@ class ZafiraReporter extends Reporter with Util {
         case BuildCasue.SCMTRIGGER =>
           run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
         case BuildCasue.MANUALTRIGGER =>
-          run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
+          run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, null)
           println("run exist ")
         case _ =>
           throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
