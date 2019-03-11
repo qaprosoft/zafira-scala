@@ -7,11 +7,11 @@ import org.slf4j.ext.XLoggerFactory
 trait Util {
 
   var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).asInstanceOf[Boolean]
-  val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", "https://stage.qaprosoft.farm/zafira-ws")
-  val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token","eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicGFzc3dvcmQiOiJkMjN0b3NtdWZwcjUrdnFxWWYzZ2xveS9yRzVQZStPaSIsInRlbmFudCI6InN0YWdlIiwiZXhwIjoxMzA0MDEzMjE3NjJ9.6CXYPBh7YmVgCN31tNIbyJUwMTYnKtmGUWDh1cERCFA2tYwYrr9ZWC7nHWvrl2O9kZHGWaQYaBCVlR0GWM30_w")
+  val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", null)
+  val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token",null)
   val ZAFIRA_PROJECT = sys.props.getOrElse("zafira_project", "Scala")
-  var ZAFIRA_RERUN_FAILURES = sys.props.getOrElse("zafira_rerun_failures", false).asInstanceOf[Boolean]
-  val ZAFIRA_REPORT_EMAILS = sys.props.getOrElse("zafira_report_emails", false).asInstanceOf[Boolean]
+  var ZAFIRA_RERUN_FAILURES = sys.props.getOrElse("zafira_rerun_failures", true).asInstanceOf[Boolean]
+  val ZAFIRA_REPORT_EMAILS = sys.props.getOrElse("zafira_report_emails", true).asInstanceOf[Boolean]
   val ZAFIRA_REPORT_SHOW_STACKTRACE = sys.props.getOrElse("zafira_report_show_stacktrace", true).asInstanceOf[Boolean]
   val ZAFIRA_CONFIGURATOR = sys.props.getOrElse("zafira_configurator", "com.qaprosoft.zafira.config.DefaultConfigurator")
   val ZAFIRA_RUN_ID_PARAM = "zafira_run_id"
