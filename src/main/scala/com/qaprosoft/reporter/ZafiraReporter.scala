@@ -127,10 +127,7 @@ class ZafiraReporter extends Reporter with Util {
       // Re-register test run to reset status onto in progress
       val response = zafiraClient.startTestRun(run)
       run = response.getObject
-      println("test run id = " + run.getId)
-       testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.List[TestType]]
-      println("after testRunResults " + testRunResults.size)
-
+      testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.List[TestType]]
       testRunResults.forEach({test => registeredTests.put(test.getName, test)
         if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
         })
@@ -149,19 +146,16 @@ class ZafiraReporter extends Reporter with Util {
         case BuildCasue.SCMTRIGGER =>
           run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
         case BuildCasue.MANUALTRIGGER =>
-          run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, null)
-          println("run exist ")
+          run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
         case _ =>
           throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
       }
     }
 
     if (run == null) {
-      println("run == null")
       throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL)
     }
     else {
-      println("run set param")
       System.setProperty(ZAFIRA_RUN_ID_PARAM, run.getId.toString)
       println(run.getId.toString)
     }
@@ -231,7 +225,6 @@ class ZafiraReporter extends Reporter with Util {
 
       val secondaryOwnerName:String  =  zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER).getUsername
       val secondaryOwner: UserType =  zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
-      println("event.testName " + event.testName)
       val testClass = event.suiteClassName.get
       val testMethod = event.testName
 
@@ -262,8 +255,7 @@ class ZafiraReporter extends Reporter with Util {
     } catch {
       case e: SkipException =>
       case e: Throwable =>
-        LOGGER.error("Undefined error during test case/method start!", e)
-        println(e.printStackTrace())
+        LOGGER.error("Undefined error during test case/method start!", e.printStackTrace())
     }
   }
 
@@ -277,7 +269,7 @@ class ZafiraReporter extends Reporter with Util {
   def onTestSuccess(event: TestSucceeded): Unit = {
     if (!ZAFIRA_ENABLED) return
     try {
-      val rs = zafiraClient.finishTest(populateTestResult(event.testName, Status.PASSED, null))
+      val rs = zafiraClient.finishTest(populateTestResult(event, Status.PASSED))
       if ((!rs.getStatus.equals(200)) && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
     } catch {
       case e: Throwable =>
@@ -288,7 +280,7 @@ class ZafiraReporter extends Reporter with Util {
   def onTestFailure(event: TestFailed): Unit = {
     if (!ZAFIRA_ENABLED) return
     try {
-      val rs = zafiraClient.finishTest(populateTestResult(event.testName, Status.FAILED, null))
+      val rs = zafiraClient.finishTest(populateTestResult(event, Status.FAILED))
       if ((!rs.getStatus.equals(200))  && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
     } catch {
       case e: Throwable =>
@@ -297,7 +289,26 @@ class ZafiraReporter extends Reporter with Util {
   }
 
   @throws[JAXBException]
-  private def populateTestResult(testName:String, status: Status, message: String) = {
+  private def populateTestResult(event:Event, status: Status) = {
+    var testName:String = null
+    var message:String = null
+    var duration:Long = 0L
+
+    event match {
+      case event: TestFailed => {
+        testName = event.testName
+        message = event.message
+        duration = event.timeStamp
+        println("duration " + duration)
+      }
+      case event: TestSucceeded => {
+        testName = event.testName
+        duration = event.timeStamp
+        println("duration " + duration)
+        message = "test succeed"
+      }
+    }
+
     val threadId = Thread.currentThread.getId
     val test = threadTest.get
     //testByThread.get(threadId);
