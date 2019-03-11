@@ -273,7 +273,7 @@ class ZafiraReporter extends Reporter with Util {
       if ((!rs.getStatus.equals(200)) && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
     } catch {
       case e: Throwable =>
-        LOGGER.error("Undefined error during test case/method finish!", e)
+        LOGGER.error("Undefined error during test case/method finish!", e.printStackTrace())
     }
   }
 
@@ -284,7 +284,7 @@ class ZafiraReporter extends Reporter with Util {
       if ((!rs.getStatus.equals(200))  && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
     } catch {
       case e: Throwable =>
-        LOGGER.error("Undefined error during test case/method finish!", e)
+        LOGGER.error("Undefined error during test case/method finish!", e.printStackTrace())
     }
   }
 
@@ -305,7 +305,6 @@ class ZafiraReporter extends Reporter with Util {
       case event: TestSucceeded => {
         testName = event.testName
         finishTime = event.timeStamp
-        
         message = "test succeed"
       }
     }
@@ -329,6 +328,19 @@ class ZafiraReporter extends Reporter with Util {
     threadTest.remove
     threadCiTestId.remove
     test
+  }
+
+  private def getFullStackTrace(event: TestFailed) = {
+    val sb = new StringBuilder
+    if (event.throwable.get == null) {
+      sb.append(event.throwable.get.getMessage).append("\n")
+      val elems = event.throwable.get.getStackTrace
+      for (elem <- elems) {
+        sb.append("\n").append(elem.toString)
+      }
+    }
+    if (!StringUtils.isEmpty(sb.toString)) sb.toString
+    else null
   }
 
 
