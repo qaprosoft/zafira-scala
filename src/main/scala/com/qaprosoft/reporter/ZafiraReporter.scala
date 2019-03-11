@@ -331,17 +331,28 @@ class ZafiraReporter extends Reporter with Util {
   }
 
   private def getFullStackTrace(event: TestFailed) = {
-
+        println("getFullStackTrace 1")
         val sb = new StringBuilder
+    println("getFullStackTrace 2")
         if (event.throwable.get == null) {
+          println("getFullStackTrace 3")
+
           sb.append(event.throwable.get.getMessage).append("\n")
+          println("getFullStackTrace 4")
           val elems = event.throwable.get.getStackTrace
+          println("getFullStackTrace 5")
           for (elem <- elems) {
+            println("getFullStackTrace 6")
             sb.append("\n").append(elem.toString)
+            println("getFullStackTrace 7")
           }
+          println("getFullStackTrace 8")
         }
+    println("getFullStackTrace 9")
         if (!StringUtils.isEmpty(sb.toString)) sb.toString
+    println("getFullStackTrace 10")
         else null
+    println("getFullStackTrace 11")
 
   }
 
