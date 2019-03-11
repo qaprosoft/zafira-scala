@@ -171,7 +171,7 @@ class ZafiraReporter extends Reporter with Util {
   } catch {
     case e: Throwable =>
       ZAFIRA_ENABLED = false
-      LOGGER.error("Undefined error during test run registration!", e)
+      LOGGER.error("Undefined error during test run registration!", e.printStackTrace())
   }
 
   }
@@ -215,7 +215,7 @@ class ZafiraReporter extends Reporter with Util {
       zafiraClient.registerTestRunResults(run)
     } catch {
       case e: Throwable =>
-        LOGGER.error("Unable to finish test run correctly", e)
+        LOGGER.error("Unable to finish test run correctly", e.printStackTrace())
     }
   }
 
