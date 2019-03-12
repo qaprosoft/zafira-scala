@@ -150,11 +150,11 @@ class ZafiraReporter extends Reporter with Util {
             run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
           case BuildCasue.MANUALTRIGGER =>
             println("suite.getId " + suite.getId)
-           // println("user.getId " + user.getId)
+            println("user.getId " + user.getId)
             println("configurator.getConfiguration " + configurator.getConfiguration)
             println("job.getId " + job.getId)
 
-            run = zafiraClient.registerTestRunByHUMAN(suite.getId, 2L, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
+            run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
           case _ =>
             throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
         }
