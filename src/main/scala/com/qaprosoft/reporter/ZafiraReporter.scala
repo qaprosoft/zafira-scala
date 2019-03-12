@@ -97,11 +97,7 @@ class ZafiraReporter extends Reporter with Util {
     try {
 
       zafiraClient.initProject(ZAFIRA_PROJECT)
-      println("user: " + zafiraClient.getUserProfile("admin").getObject)
-      println("user status: " + zafiraClient.getUserProfile("admin").getStatus)
-       user = zafiraClient.getUserProfile.getObject
-
-
+      user = zafiraClient.getUserProfile.getObject
       val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
 
       suite = zafiraClient.registerTestSuite("Test suite",event.threadName, suiteOwner.getId)
@@ -149,12 +145,7 @@ class ZafiraReporter extends Reporter with Util {
           case BuildCasue.SCMTRIGGER =>
             run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
           case BuildCasue.MANUALTRIGGER =>
-            println("suite.getId " + suite.getId)
-            println("user.getId " + user.getId)
-            println("configurator.getConfiguration " + configurator.getConfiguration)
-            println("job.getId " + job.getId)
-
-            run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
+            run = zafiraClient.registerTestRunByHUMAN(suite.getId, 2L, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
           case _ =>
             throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
         }
@@ -177,14 +168,6 @@ class ZafiraReporter extends Reporter with Util {
   }
 
 
-
-
-  /**
-    * Marshals configuration bean to XML.
-    *
-    * @param config bean
-    * @return XML representation of configuration bean
-    */
   private def convertToXML(config: ConfigurationType):String = {
     val stringWriter = new StringWriter
     try {
