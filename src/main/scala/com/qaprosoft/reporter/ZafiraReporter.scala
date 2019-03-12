@@ -150,7 +150,7 @@ class ZafiraReporter extends Reporter with Util {
             run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
           case BuildCasue.MANUALTRIGGER =>
             println("suite.getId " + suite.getId)
-            println("user.getId " + user.getId)
+           // println("user.getId " + user.getId)
             println("configurator.getConfiguration " + configurator.getConfiguration)
             println("job.getId " + job.getId)
 
