@@ -97,9 +97,10 @@ class ZafiraReporter extends Reporter with Util {
     try {
 
       zafiraClient.initProject(ZAFIRA_PROJECT)
-      println("user: " + zafiraClient.getUserProfile.getObject)
-      println("user status: " + zafiraClient.getUserProfile.getStatus)
-       user = zafiraClient.getUserProfile.getObject
+      println("user: " + zafiraClient.getUserProfile("admin").getObject)
+      println("user status: " + zafiraClient.getUserProfile("admin").getStatus)
+       user = zafiraClient.getUserProfile("admin").getObject
+
 
       val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
 
