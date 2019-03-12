@@ -9,6 +9,7 @@ import org.scalatest.Reporter
 import com.qaprosoft.zafira.client.ZafiraClient
 import com.qaprosoft.zafira.config.CIConfig._
 import com.qaprosoft.zafira.config._
+import com.qaprosoft.zafira.listener.ExcludeTestsForRerun
 import com.qaprosoft.zafira.models.db.TestRun.Initiator
 import com.qaprosoft.zafira.models.dto.config.ConfigurationType
 import com.qaprosoft.zafira.models.dto.user.UserType
@@ -130,7 +131,9 @@ class ZafiraReporter extends Reporter with Util {
         testRunResults.forEach({test => registeredTests.put(test.getName, test)
           if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
         })
-        if (ZAFIRA_RERUN_FAILURES) LOGGER.info("It is has not implemented for scala yet") //ExcludeTestsForRerun.excludeTestsForRerun(suiteContext, testRunResults, configurator);
+        if (ZAFIRA_RERUN_FAILURES) {
+         // ExcludeTestsForRerun.excludeTestsForRerun(event, testRunResults, configurator)
+        }
       }
       else {
         if (ZAFIRA_RERUN_FAILURES) {
@@ -145,7 +148,7 @@ class ZafiraReporter extends Reporter with Util {
           case BuildCasue.SCMTRIGGER =>
             run = zafiraClient.registerTestRunBySCHEDULER(suite.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.SCHEDULER, JIRA_SUITE_ID)
           case BuildCasue.MANUALTRIGGER =>
-            run = zafiraClient.registerTestRunByHUMAN(suite.getId, 2L, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
+            run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
           case _ =>
             throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
         }
@@ -156,7 +159,7 @@ class ZafiraReporter extends Reporter with Util {
       }
       else {
         System.setProperty(ZAFIRA_RUN_ID_PARAM, run.getId.toString)
-        println(run.getId.toString)
+
       }
       Runtime.getRuntime.addShutdownHook(new TestRunShutdownHook(zafiraClient, run))
     } catch {
