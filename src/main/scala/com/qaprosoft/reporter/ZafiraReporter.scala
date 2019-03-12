@@ -24,7 +24,7 @@ class ZafiraReporter extends Reporter with Util {
   private val LOGGER = LoggerFactory.getLogger(classOf[ZafiraReporter])
 
   var parentJob: JobType = null
-  var user: UserType = null
+  var user: UserType = new UserType
   var suite: TestSuiteType = null
   var run:TestRunType = null
   var test:TestType = null
