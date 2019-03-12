@@ -99,7 +99,7 @@ class ZafiraReporter extends Reporter with Util {
       zafiraClient.initProject(ZAFIRA_PROJECT)
       println("user: " + zafiraClient.getUserProfile("admin").getObject)
       println("user status: " + zafiraClient.getUserProfile("admin").getStatus)
-       user = zafiraClient.getUserProfile("admin").getObject
+       user = zafiraClient.getUserProfile.getObject
 
 
       val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
@@ -154,7 +154,7 @@ class ZafiraReporter extends Reporter with Util {
             println("configurator.getConfiguration " + configurator.getConfiguration)
             println("job.getId " + job.getId)
 
-            run = zafiraClient.registerTestRunByHUMAN(suite.getId, user.getId, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
+            run = zafiraClient.registerTestRunByHUMAN(suite.getId, 2L, convertToXML(configurator.getConfiguration), job.getId, ciConfig, Initiator.HUMAN, JIRA_SUITE_ID)
           case _ =>
             throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL + " due to the misses build cause: '" + ciConfig.getCiBuildCause + "'")
         }
