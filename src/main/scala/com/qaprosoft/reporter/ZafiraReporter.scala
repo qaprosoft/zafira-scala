@@ -52,7 +52,7 @@ class ZafiraReporter extends Reporter with Util {
 
       case event: SuiteStarting =>  println(event.suiteName + "\n...suite starting")
       case event: SuiteCompleted => println(event.suiteName + "\n...suite completed")
-      case event: SuiteAborted => println(event.suiteName + "\n...suite aborted")
+      case event: SuiteAborted => onTestFinish(event)
 
       case event: RunStarting =>  onStart(event)
       case event: RunStopped => println(event.threadName + "\n...run stopped")
@@ -323,6 +323,13 @@ class ZafiraReporter extends Reporter with Util {
 
       case event: TestCanceled => {
         testName = event.testName
+        finishTime = event.timeStamp
+        message = event.message
+        status =  Status.ABORTED
+      }
+
+      case event: SuiteAborted => {
+        testName = event.suiteName
         finishTime = event.timeStamp
         message = event.message
         status =  Status.ABORTED
