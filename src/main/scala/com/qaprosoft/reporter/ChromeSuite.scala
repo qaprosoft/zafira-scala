@@ -84,12 +84,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
     suiteLogger.info(s"CHECKED IN DRIVER:${webDriver.hashCode()}")
   }
 
-  /**
-    * Create a Selenium Grid WebDriver
-    *
-    * @param capability
-    * @return
-    */
+
   def gridWebDriver(capability: DesiredCapabilities): WebDriver = {
     val remoteWebDriver: RemoteWebDriver = new RemoteWebDriver(new URL(seleniumGrid.selenium_url), capability)
     remoteWebDriver.setFileDetector(new LocalFileDetector())

@@ -2,14 +2,13 @@ package com.qaprosoft.reporter
 
 import java.io.StringWriter
 import java.util
-import java.util.{Date, UUID}
+import java.util.UUID
 
 import org.scalatest.events._
 import org.scalatest.Reporter
 import com.qaprosoft.zafira.client.ZafiraClient
 import com.qaprosoft.zafira.config.CIConfig._
 import com.qaprosoft.zafira.config._
-import com.qaprosoft.zafira.listener.ExcludeTestsForRerun
 import com.qaprosoft.zafira.models.db.TestRun.Initiator
 import com.qaprosoft.zafira.models.dto.config.ConfigurationType
 import com.qaprosoft.zafira.models.dto.user.UserType
@@ -65,12 +64,6 @@ class ZafiraReporter extends Reporter with Util {
     }
   }
 
-
-  /**
-    * Reads zafira.properties and creates zafira client.
-    *
-    * @return if initialization success
-    */
   private def initializeZafira():ZafiraClient = {
     val zc = new ZafiraClient(ZAFIRA_URL)
     try {

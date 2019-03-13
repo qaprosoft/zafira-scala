@@ -7,6 +7,8 @@ scalaVersion := "2.12.7"
 
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-C", "com.qaprosoft.reporter.ZafiraReporter")
 
+resolvers += "Qaprosoft Snapshots" at "https://ci.qaprosoft.com/nexus/content/repositories/snapshots/"
+
 libraryDependencies ++= Seq(
     "org.scalatest" % "scalatest_2.12" % "3.0.5",
     "org.scalactic" %% "scalactic" % "3.0.5",
@@ -28,7 +30,7 @@ libraryDependencies ++= Seq(
     "org.codehaus.jettison" % "jettison" % "1.4.0",
     "com.qaprosoft" % "zafira" % "3.3.50" pomOnly(),
     "com.qaprosoft" % "zafira-models" % "3.3.50",
-    "com.qaprosoft" % "zafira-client" % "3.3.50",
+    "com.qaprosoft" % "zafira-client" % "3.3.74-SNAPSHOT",
     "commons-beanutils" % "commons-beanutils" % "1.9.3",
     "org.seleniumhq.selenium" % "selenium-java" % "3.11.0",
     "commons-pool" % "commons-pool" % "1.6"
