@@ -44,11 +44,11 @@ class ZafiraReporter extends Reporter with Util {
     event match {
 
       case event: TestStarting => onTestStart(event)
-      case event: TestSucceeded => onTestSuccess(event)
+      case event: TestSucceeded => onTestFinish(event)
       case event: TestIgnored => println(event.testName + "\n...test ignored")
       case event: TestPending => println(event.testName + "\n...test pending")
-      case event: TestFailed => onTestFailure(event)
-      case event: TestCanceled => println(event.testName + "\n...test canceled")
+      case event: TestFailed => onTestFinish(event)
+      case event: TestCanceled => onTestFinish(event)
 
       case event: SuiteStarting =>  println(event.suiteName + "\n...suite starting")
       case event: SuiteCompleted => println(event.suiteName + "\n...suite completed")
@@ -264,21 +264,21 @@ class ZafiraReporter extends Reporter with Util {
     threadCiTestId.get
   }
 
-  def onTestSuccess(event: TestSucceeded): Unit = {
-    if (!ZAFIRA_ENABLED) return
-    try {
-      val rs = zafiraClient.finishTest(populateTestResult(event, Status.PASSED))
-      if ((!rs.getStatus.equals(200)) && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
-    } catch {
-      case e: Throwable =>
-        LOGGER.error("Undefined error during test case/method finish!", e.printStackTrace())
-    }
-  }
+//  def onTestSuccess(event: TestSucceeded): Unit = {
+//    if (!ZAFIRA_ENABLED) return
+//    try {
+//      val rs = zafiraClient.finishTest(populateTestResult(event, Status.PASSED))
+//      if ((!rs.getStatus.equals(200)) && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
+//    } catch {
+//      case e: Throwable =>
+//        LOGGER.error("Undefined error during test case/method finish!", e.printStackTrace())
+//    }
+//  }
 
-  def onTestFailure(event: TestFailed): Unit = {
+  def onTestFinish(event: Event): Unit = {
     if (!ZAFIRA_ENABLED) return
     try {
-      val rs = zafiraClient.finishTest(populateTestResult(event, Status.FAILED))
+      val rs = zafiraClient.finishTest(populateTestResult(event))
       if ((!rs.getStatus.equals(200))  && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
     } catch {
       case e: Throwable =>
@@ -287,22 +287,45 @@ class ZafiraReporter extends Reporter with Util {
   }
 
   @throws[JAXBException]
-  private def populateTestResult(event:Event, status: Status) = {
+  private def populateTestResult(event:Event) = {
     var testName:String = null
     var message:String = null
     var finishTime = 0L
+    var status:Status = Status.UNKNOWN
 
     event match {
       case event: TestFailed => {
         testName = event.testName
         message = getFullStackTrace(event)
         finishTime = event.timeStamp
-
+        status =  Status.FAILED
       }
       case event: TestSucceeded => {
         testName = event.testName
         finishTime = event.timeStamp
         message = "test succeed"
+        status =  Status.PASSED
+      }
+
+      case event: TestPending => {
+        testName = event.testName
+        finishTime = event.timeStamp
+        message = "test pending"
+        status =  Status.IN_PROGRESS
+      }
+
+      case event: TestIgnored => {
+        testName = event.testName
+        finishTime = event.timeStamp
+        message = event.testName
+        status =  Status.SKIPPED
+      }
+
+      case event: TestCanceled => {
+        testName = event.testName
+        finishTime = event.timeStamp
+        message = event.message
+        status =  Status.ABORTED
       }
     }
 
