@@ -14,7 +14,7 @@ import org.scalatest._
       textField("q").value = "Sun"
       submit()
 
-      assert(pageTitle contains ("fdfdfdfd"))
+      assert(pageTitle contains ("Sun"))
       webDriver.quit()
     }
 
@@ -25,7 +25,7 @@ import org.scalatest._
       textField("q").value = "Sun"
       submit()
 
-      assert(pageTitle contains ("fdfdfdfd"))
+      assert(pageTitle contains ("sdsdsd"))
       webDriver.quit()
     }
 

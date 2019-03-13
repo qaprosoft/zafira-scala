@@ -16,7 +16,6 @@ class CheeseTest extends FunSuite with ChromeSuite {
     submit()
     suiteLogger.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
-    webDriver.quit()
   }
 
   test("Cheese finished") {
@@ -28,7 +27,6 @@ class CheeseTest extends FunSuite with ChromeSuite {
     submit()
     suiteLogger.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
-    webDriver.quit()
   }
 
 }
