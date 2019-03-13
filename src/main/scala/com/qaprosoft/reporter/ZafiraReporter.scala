@@ -135,7 +135,8 @@ class ZafiraReporter extends Reporter with Util {
 
         var response = zafiraClient.startTestRun(run)
         run = response.getObject
-        val testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
+        val testRunResults1 = zafiraClient.getTestRunResults(run.getId).getObject
+        val testRunResults = util.Arrays.asList(testRunResults1)
         println(testRunResults.getClass.getName + "  class")
         testRunResults.asInstanceOf[util.List[TestType]].forEach(test => {
           registeredTests.put(test.getName, test)
