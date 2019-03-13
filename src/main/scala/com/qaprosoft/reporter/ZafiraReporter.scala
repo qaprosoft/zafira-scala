@@ -139,7 +139,7 @@ class ZafiraReporter extends Reporter with Util {
         println(testRunResults1.getClass.getName + "  class1")
         val testRunResults = util.Arrays.asList(testRunResults1)
         println(testRunResults.getClass.getName + "  class2")
-        testRunResults.asInstanceOf[util.List[TestType]].forEach(test => {
+        testRunResults1.asInstanceOf[util.List[TestType]].forEach(test => {
           registeredTests.put(test.getName, test)
           if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
         })
