@@ -48,17 +48,28 @@ class ZafiraReporter extends Reporter with Util {
       case event: TestIgnored => println(event.testName + "\n...test ignored")
       case event: TestPending => println(event.testName + "\n...test pending")
       case event: TestFailed => onTestFailure(event)
+      case event: TestCanceled => println(event.testName + "\n...test canceled")
 
       case event: SuiteStarting =>  println(event.suiteName + "\n...suite starting")
       case event: SuiteCompleted => println(event.suiteName + "\n...suite completed")
       case event: SuiteAborted => println(event.suiteName + "\n...suite aborted")
 
-      case event: InfoProvided => println(event.nameInfo + "\n...info provided")
-
       case event: RunStarting =>  onStart(event)
       case event: RunStopped => println(event.threadName + "\n...run stopped")
       case event: RunAborted => println(event.threadName + "\n...run aborted")
       case event: RunCompleted => onFinish(event)
+
+      case event: AlertProvided => println(event.message + "\n...allert provided")
+      case event: InfoProvided => println(event.nameInfo + "\n...info provided")
+      case event: MarkupProvided => println(event.text + "\n...markup provided")
+      case event: NoteProvided => println(event.message + "\n...note provided")
+
+      case event: DiscoveryCompleted => println(event.duration.get + "\n...discovery completed")
+      case event: DiscoveryStarting => println(event.timeStamp + "\n...discovery starting")
+
+      case event: ScopeClosed => println(event.message + "\n...scope closed")
+      case event: ScopeOpened => println(event.message + "\n...scope opened")
+      case event: ScopePending => println(event.message + "\n...scope pending")
 
       case _ =>
     }
