@@ -9,7 +9,6 @@ import org.scalatest._
 
     test("Sun started") {
       go to (host)
-
       click on "q"
       textField("q").value = "Sun"
       submit()

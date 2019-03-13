@@ -115,12 +115,15 @@ class ZafiraReporter extends Reporter with Util {
         anonymous = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
         parentJob = zafiraClient.registerJob(ciConfig.getCiParentUrl, anonymous.getId)
       }
+
+      println("ci run id " + ciConfig.getCiRunId)
       // Searching for existing test run with same CI run id in case of rerun
       if (!StringUtils.isEmpty(ciConfig.getCiRunId)) {
         val response = zafiraClient.getTestRunByCiRunId(ciConfig.getCiRunId)
         run = response.getObject
       }
       if (run != null) {
+        println("run != null ")
         // Already discovered run with the same CI_RUN_ID, it is re-run functionality!
         // Reset build number for re-run to map to the latest rerun build
         run.setBuildNumber(ciConfig.getCiBuild)
@@ -132,7 +135,8 @@ class ZafiraReporter extends Reporter with Util {
         val response = zafiraClient.startTestRun(run)
         run = response.getObject
         testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.List[TestType]]
-        testRunResults.forEach({test => registeredTests.put(test.getName, test)
+        testRunResults.forEach(test => {
+          registeredTests.put(test.getName, test)
           if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
         })
         if (ZAFIRA_RERUN_FAILURES) {
