@@ -105,7 +105,7 @@ class ZafiraReporter extends Reporter with Util {
       user = zafiraClient.getUserProfile.getObject
       val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
 
-      suite = zafiraClient.registerTestSuite("Test suite",event.threadName, suiteOwner.getId)
+      suite = zafiraClient.registerTestSuite(SUITE_NAME,null, suiteOwner.getId)
 
       val job: JobType = zafiraClient.registerJob(ciConfig.getCiUrl, suiteOwner.getId)
 
@@ -327,6 +327,7 @@ class ZafiraReporter extends Reporter with Util {
         message = event.message
         status =  Status.ABORTED
       }
+
     }
 
     val threadId = Thread.currentThread.getId
