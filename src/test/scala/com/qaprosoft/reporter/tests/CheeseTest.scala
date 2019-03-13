@@ -18,6 +18,17 @@ class CheeseTest extends FunSuite with ChromeSuite {
     assert(pageTitle contains ("Cheese!"))
   }
 
+  test("Cheese in progress") {
+    go to (host)
+    suiteLogger.info("Google is opened")
+    click on "q"
+    textField("q").value = "Cheese!"
+    suiteLogger.info("Cheese query is typed")
+    submit()
+    suiteLogger.info("Submit button is clicked")
+    assert(pageTitle contains ("Cheese!"))
+  }
+
   test("Cheese finished") {
     go to (host)
     suiteLogger.info("Google is opened")

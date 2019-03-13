@@ -14,6 +14,16 @@ import org.scalatest._
       textField("q").value = "Sun"
       submit()
 
+      assert(pageTitle contains ("Sun"))
+    }
+
+    test("Sun in progress") {
+      go to (host)
+
+      click on "q"
+      textField("q").value = "Sun"
+      submit()
+
       assert(pageTitle contains ("sdsdsd"))
     }
 
