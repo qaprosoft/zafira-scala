@@ -29,7 +29,6 @@ class ZafiraReporter extends Reporter with Util {
   var suite: TestSuiteType = null
   var run:TestRunType = null
   var test:TestType = null
-  var testRunResults = new  util.ArrayList[TestType]
   var registeredTests: util.Map[String, TestType] = new util.HashMap[String, TestType]
 
   var classesToRerun: util.Set[String] = new util.HashSet[String]
@@ -136,9 +135,8 @@ class ZafiraReporter extends Reporter with Util {
 
         var response = zafiraClient.startTestRun(run)
         run = response.getObject
-        println(zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.ArrayList[TestType]].getClass.getName + "!!!")
-        testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.ArrayList[TestType]]
-        testRunResults.forEach(test => {
+        val testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
+        testRunResults.asInstanceOf[util.List[TestType]]forEach(test => {
           registeredTests.put(test.getName, test)
           if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
         })
