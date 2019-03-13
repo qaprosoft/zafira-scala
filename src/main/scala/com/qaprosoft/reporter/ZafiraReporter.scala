@@ -7,6 +7,7 @@ import java.util.UUID
 import org.scalatest.events._
 import org.scalatest.Reporter
 import com.qaprosoft.zafira.client.ZafiraClient
+import com.qaprosoft.zafira.client.ZafiraClient.Response
 import com.qaprosoft.zafira.config.CIConfig._
 import com.qaprosoft.zafira.config._
 import com.qaprosoft.zafira.models.db.TestRun.Initiator
@@ -132,7 +133,8 @@ class ZafiraReporter extends Reporter with Util {
         run.setConfigXML(convertToXML(configurator.getConfiguration))
 
         // Re-register test run to reset status onto in progress
-        val response = zafiraClient.startTestRun(run)
+
+        var response = zafiraClient.startTestRun(run)
         run = response.getObject
         testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.List[TestType]]
         testRunResults.forEach(test => {
