@@ -2,7 +2,7 @@ package com.qaprosoft.reporter
 
 import java.io.StringWriter
 import java.util
-import java.util.UUID
+import java.util.{Date, UUID}
 
 import org.scalatest.events._
 import org.scalatest.Reporter
@@ -136,15 +136,12 @@ class ZafiraReporter extends Reporter with Util {
         var response = zafiraClient.startTestRun(run)
         run = response.getObject
         var testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
-        println(testRunResults.length + " 1")
-        println(testRunResults.getClass.getName + " 2")
-
-
         testRunResults.foreach(test => {
           registeredTests.put(test.getName, test)
           if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
         })
         if (ZAFIRA_RERUN_FAILURES) {
+          println("rerun failures")
          // ExcludeTestsForRerun.excludeTestsForRerun(event, testRunResults, configurator)
         }
       }
@@ -238,17 +235,17 @@ class ZafiraReporter extends Reporter with Util {
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
       // Search already registered test!
       println("4")
-      //      if (registeredTests.containsKey(testName)) {
-      //        println("5")
-      //        startedTest = registeredTests.get(testName)
-      //        // Skip already passed tests if rerun failures enabled
-      //        if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)
-      //        startedTest.setFinishTime(null)
-      //        startedTest.setStartTime(new Date().getTime)
-      //        startedTest.setCiTestId(getThreadCiTestId)
-      //        startedTest.setTags(null)
-      //        startedTest = zafiraClient.registerTestRestart(startedTest)
-      //      }
+            if (registeredTests.containsKey(testName)) {
+              println("5")
+              startedTest = registeredTests.get(testName)
+              // Skip already passed tests if rerun failures enabled
+              if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)
+              startedTest.setFinishTime(event.timeStamp)
+              startedTest.setStartTime(new Date().getTime)
+              startedTest.setCiTestId(getThreadCiTestId)
+              startedTest.setTags(null)
+              startedTest = zafiraClient.registerTestRestart(startedTest)
+            }
       if (startedTest == null) { //new test run registration
         val testArgs = event.testName
         var group = event.suiteClassName.get
