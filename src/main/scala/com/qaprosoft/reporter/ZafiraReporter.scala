@@ -7,12 +7,12 @@ import java.util.UUID
 import org.scalatest.events._
 import org.scalatest.Reporter
 import com.qaprosoft.zafira.client.ZafiraClient
-import com.qaprosoft.zafira.client.ZafiraClient.Response
 import com.qaprosoft.zafira.config.CIConfig._
 import com.qaprosoft.zafira.config._
 import com.qaprosoft.zafira.models.db.TestRun.Initiator
 import com.qaprosoft.zafira.models.dto.config.ConfigurationType
 import com.qaprosoft.zafira.models.dto.user.UserType
+import com.qaprosoft.zafira.models.dto.TestType
 import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
@@ -136,6 +136,7 @@ class ZafiraReporter extends Reporter with Util {
 
         var response = zafiraClient.startTestRun(run)
         run = response.getObject
+        println(zafiraClient.getTestRunResults(run.getId).getObject.getClass.getName + "!!!")
         testRunResults = zafiraClient.getTestRunResults(run.getId).getObject.asInstanceOf[util.List[TestType]]
         testRunResults.forEach(test => {
           registeredTests.put(test.getName, test)
