@@ -138,11 +138,12 @@ class ZafiraReporter extends Reporter with Util {
         var testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
         println(testRunResults.length + " 1")
         println(testRunResults.getClass.getName + " 2")
-//
-//        testRunResults.forEach(test => {
-//          registeredTests.put(test.getName, test)
-//          if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
-//        })
+
+
+        testRunResults.foreach(test => {
+          registeredTests.put(test.getName, test)
+          if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
+        })
         if (ZAFIRA_RERUN_FAILURES) {
          // ExcludeTestsForRerun.excludeTestsForRerun(event, testRunResults, configurator)
         }
