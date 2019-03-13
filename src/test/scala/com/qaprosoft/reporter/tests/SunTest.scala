@@ -7,7 +7,7 @@ import org.scalatest._
 
     val host = "http://www.google.com/"
 
-    test("Sun!") {
+    test("Sun started") {
       go to (host)
 
       click on "q"
@@ -17,4 +17,16 @@ import org.scalatest._
       assert(pageTitle contains ("fdfdfdfd"))
       webDriver.quit()
     }
+
+    test("Sun finished") {
+      go to (host)
+
+      click on "q"
+      textField("q").value = "Sun"
+      submit()
+
+      assert(pageTitle contains ("fdfdfdfd"))
+      webDriver.quit()
+    }
+
   }

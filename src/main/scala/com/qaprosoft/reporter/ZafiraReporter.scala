@@ -45,8 +45,8 @@ class ZafiraReporter extends Reporter with Util {
 
       case event: TestStarting => onTestStart(event)
       case event: TestSucceeded => onTestFinish(event)
-      case event: TestIgnored => println(event.testName + "\n...test ignored")
-      case event: TestPending => println(event.testName + "\n...test pending")
+      case event: TestIgnored => onTestFinish(event)
+      case event: TestPending => onTestFinish(event)
       case event: TestFailed => onTestFinish(event)
       case event: TestCanceled => onTestFinish(event)
 
@@ -287,7 +287,7 @@ class ZafiraReporter extends Reporter with Util {
   }
 
   @throws[JAXBException]
-  private def populateTestResult(event:Event) = {
+  private def populateTestResult(event:Event):TestType = {
     var testName:String = null
     var message:String = null
     var finishTime = 0L
@@ -311,7 +311,7 @@ class ZafiraReporter extends Reporter with Util {
         testName = event.testName
         finishTime = event.timeStamp
         message = "test pending"
-        status =  Status.IN_PROGRESS
+        status =  Status.QUEUED
       }
 
       case event: TestIgnored => {
@@ -323,13 +323,6 @@ class ZafiraReporter extends Reporter with Util {
 
       case event: TestCanceled => {
         testName = event.testName
-        finishTime = event.timeStamp
-        message = event.message
-        status =  Status.ABORTED
-      }
-
-      case event: SuiteAborted => {
-        testName = event.suiteName
         finishTime = event.timeStamp
         message = event.message
         status =  Status.ABORTED

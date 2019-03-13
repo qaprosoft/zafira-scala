@@ -7,7 +7,19 @@ class CheeseTest extends FunSuite with ChromeSuite {
 
   val host = "http://www.google.com/"
 
-  test("Cheese!") {
+  test("Cheese started") {
+    go to (host)
+    suiteLogger.info("Google is opened")
+    click on "q"
+    textField("q").value = "Cheese!"
+    suiteLogger.info("Cheese query is typed")
+    submit()
+    suiteLogger.info("Submit button is clicked")
+    assert(pageTitle contains ("Cheese!"))
+    webDriver.quit()
+  }
+
+  test("Cheese finished") {
     go to (host)
     suiteLogger.info("Google is opened")
     click on "q"
