@@ -13,7 +13,7 @@ import org.scalatest._
       textField("q").value = "Sun"
       submit()
 
-      assert(pageTitle contains ("Sun"))
+      assert(pageTitle contains ("sdsdsd"))
     }
 
     test("Sun in progress") {
@@ -23,7 +23,7 @@ import org.scalatest._
       textField("q").value = "Sun"
       submit()
 
-      assert(pageTitle contains ("sdsdsd"))
+      assert(pageTitle contains ("Sun"))
     }
 
     test("Sun finished") {
