@@ -145,8 +145,9 @@ class ZafiraReporter extends Reporter with Util {
           for (test <- testRunResults) {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
-          System.setProperty(TESTS_TO_RERUN, testNamesRerun.toString)
+          System.setProperty("tests_to_rerun", testNamesRerun.toString)
           println("Tests needs rerun "  + testNamesRerun.toString)
+
 
           }
       }
