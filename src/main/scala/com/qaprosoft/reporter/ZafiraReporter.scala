@@ -5,7 +5,7 @@ import java.util
 import java.util.{Date, UUID}
 
 import org.scalatest.events._
-import org.scalatest.{PathMessageRecordingInformer, Reporter, Tag}
+import org.scalatest._
 import com.qaprosoft.zafira.client.ZafiraClient
 import com.qaprosoft.zafira.config.CIConfig._
 import com.qaprosoft.zafira.config._
@@ -145,6 +145,7 @@ class ZafiraReporter extends Reporter with Util {
           for (test <- testRunResults) {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
+          System.setProperty(TESTS_TO_RERUN, testNamesRerun.toString)
           println("Tests needs rerun "  + testNamesRerun.toString)
 
           }
@@ -272,17 +273,6 @@ class ZafiraReporter extends Reporter with Util {
     if (StringUtils.isEmpty(threadCiTestId.get)) threadCiTestId.set(UUID.randomUUID.toString)
     threadCiTestId.get
   }
-
-//  def onTestSuccess(event: TestSucceeded): Unit = {
-//    if (!ZAFIRA_ENABLED) return
-//    try {
-//      val rs = zafiraClient.finishTest(populateTestResult(event, Status.PASSED))
-//      if ((!rs.getStatus.equals(200)) && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
-//    } catch {
-//      case e: Throwable =>
-//        LOGGER.error("Undefined error during test case/method finish!", e.printStackTrace())
-//    }
-//  }
 
   def onTestFinish(event: Event): Unit = {
     if (!ZAFIRA_ENABLED) return

@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.{CapabilityType, DesiredCapabilities, LocalFileDetector, RemoteWebDriver}
 import org.openqa.selenium.support.ThreadGuard
 import org.scalatest._
+import org.scalatest.events.{Event, TestStarting}
 import org.scalatest.selenium.{Driver, WebBrowser}
 import org.slf4j.ext.XLoggerFactory
 
@@ -25,14 +26,6 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
     lazy val selenium_url = sys.props.getOrElse("SELENIUM_URL", "http://qpsdemo:kqyQZC54WZ2A@stage.qaprosoft.com:4444/wd/hub")
   }
   var number = 0
-
-  override def withFixture(test: NoArgTest) = { // Define a shared fixture
-    println("test here")
-    try test()
-    finally {
-      println("test here 2")
-    }
-  }
 
   implicit lazy val webDriver: WebDriver = {
     val driver = seleniumGridConfig.enabled.toBoolean match {
@@ -160,6 +153,15 @@ object WebDriverPool {
 
       driver
     }
+  }
+
+  override def withFixture(test: NoArgTest) = {
+    var outcome:Outcome = null
+    if(RUN_TESTS.contains(test.name)) {
+      println(test.name + " is applyed")
+      outcome = super.withFixture(test)
+    } else println("test here")
+    outcome
   }
 
 }
