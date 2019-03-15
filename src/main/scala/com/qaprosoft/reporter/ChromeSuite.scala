@@ -157,6 +157,7 @@ object WebDriverPool {
 
   override def withFixture(test: NoArgTest) = {
     var outcome:Outcome = null
+    if ()
     if(RUN_TESTS.contains(test.name)) {
       println(test.name + " is applyed")
       outcome = super.withFixture(test)
