@@ -252,6 +252,7 @@ class ZafiraReporter extends Reporter with Util {
               startedTest = registeredTests.get(testName)
               // Skip already passed tests if rerun failures enabled
               if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)
+              println("6")
               startedTest.setFinishTime(event.timeStamp)
               startedTest.setStartTime(new Date().getTime)
               startedTest.setCiTestId(getThreadCiTestId)
