@@ -16,7 +16,7 @@ trait Util {
   val ZAFIRA_CONFIGURATOR = sys.props.getOrElse("zafira_configurator", "com.qaprosoft.zafira.config.DefaultConfigurator")
   val ZAFIRA_RUN_ID_PARAM = "zafira_run_id"
   val TESTS_TO_RERUN = "tests_to_rerun"
-  val RUN_TESTS = sys.props.getOrElse("tests_to_rerun","Sun started")
+  val RUN_TESTS = sys.props.getOrElse("tests_to_rerun", "unknown")
   val SUITE_NAME =  sys.props.getOrElse("suite_name","unknown")
 
   var CI_URL = sys.props.getOrElse("ci_url",null)

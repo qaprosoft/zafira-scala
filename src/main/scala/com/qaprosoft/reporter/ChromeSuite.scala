@@ -10,7 +10,6 @@ import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.{CapabilityType, DesiredCapabilities, LocalFileDetector, RemoteWebDriver}
 import org.openqa.selenium.support.ThreadGuard
 import org.scalatest._
-import org.scalatest.events.{Event, TestStarting}
 import org.scalatest.selenium.{Driver, WebBrowser}
 import org.slf4j.ext.XLoggerFactory
 
@@ -158,9 +157,9 @@ object WebDriverPool {
   override def withFixture(test: NoArgTest) = {
     var outcome:Outcome = null
     if(RUN_TESTS.contains(test.name)) {
-      println(test.name + " is applyed")
+      println(test.name + " is reruning")
       outcome = super.withFixture(test)
-    } else println("test here")
+    } else println(test.name + " is already passed")
     outcome
   }
 

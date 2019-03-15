@@ -5,12 +5,4 @@ import org.scalatest.{BeforeAndAfterAll, Suites}
 
 class MySuite extends Suites (
   new SunTest,
-  new CheeseTest) with BeforeAndAfterAll{
-
-
-  override def beforeAll(): Unit = {
-    println("Before!")
-
-  }
-
-}
+  new CheeseTest)
