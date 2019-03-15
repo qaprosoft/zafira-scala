@@ -5,7 +5,7 @@ import java.util
 import java.util.{Date, UUID}
 
 import org.scalatest.events._
-import org.scalatest.Reporter
+import org.scalatest.{PathMessageRecordingInformer, Reporter, Tag}
 import com.qaprosoft.zafira.client.ZafiraClient
 import com.qaprosoft.zafira.config.CIConfig._
 import com.qaprosoft.zafira.config._
@@ -18,7 +18,6 @@ import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import com.qaprosoft.zafira.models.db.Status
-import org.testng.SkipException
 
 class ZafiraReporter extends Reporter with Util {
 
@@ -39,6 +38,7 @@ class ZafiraReporter extends Reporter with Util {
   private val threadTest = new ThreadLocal[TestType]
 
   val zafiraClient:ZafiraClient = initializeZafira
+  var testNamesRerun = new util.ArrayList[String]
 
   def apply(event: Event) {
     event match {
@@ -136,15 +136,18 @@ class ZafiraReporter extends Reporter with Util {
         var response = zafiraClient.startTestRun(run)
         run = response.getObject
         var testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
-        testRunResults.foreach(test => {
-          registeredTests.put(test.getName, test)
-          if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
-        })
+//        testRunResults.foreach(test => {
+//          registeredTests.put(test.getName, test)
+//          if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
+//        })
         if (ZAFIRA_RERUN_FAILURES) {
           println("rerun failures")
+          for (test <- testRunResults) {
+            if (test.isNeedRerun) testNamesRerun.add(test.getName)
+          }
+          println("Tests needs rerun "  + testNamesRerun.toString)
 
-          configureFailedTests(event, testRunResults)
-        }
+          }
       }
       else {
         if (ZAFIRA_RERUN_FAILURES) {
@@ -180,18 +183,6 @@ class ZafiraReporter extends Reporter with Util {
     }
 
   }
-
-  def configureFailedTests(event: RunStarting, testRunResults: Array[TestType]): Unit = {
-    var testNamesRerun = new util.ArrayList[String]
-
-    for (test <- testRunResults) {
-      if (test.isNeedRerun) testNamesRerun.add(test.getName)
-    }
-
-    println("Tests needs rerun "  + testNamesRerun.toString);
-
-  }
-
 
   private def convertToXML(config: ConfigurationType):String = {
     val stringWriter = new StringWriter
@@ -270,7 +261,6 @@ class ZafiraReporter extends Reporter with Util {
       threadTest.set(startedTest)
       registeredTests.put(event.testName, startedTest)
     } catch {
-      case e: SkipException =>
       case e: Throwable =>
         LOGGER.error("Undefined error during test case/method start!", e.printStackTrace())
     }

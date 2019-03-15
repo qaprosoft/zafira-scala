@@ -3,7 +3,7 @@ package com.qaprosoft.reporter.tests
 import com.qaprosoft.reporter.ChromeSuite
 import org.scalatest._
 
-class CheeseTest extends FunSuite with ChromeSuite {
+class CheeseTest extends FunSuite with ChromeSuite{
 
   val host = "http://www.google.com/"
 

@@ -26,6 +26,14 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
   }
   var number = 0
 
+  override def withFixture(test: NoArgTest) = { // Define a shared fixture
+    println("test here")
+    try test()
+    finally {
+      println("test here 2")
+    }
+  }
+
   implicit lazy val webDriver: WebDriver = {
     val driver = seleniumGridConfig.enabled.toBoolean match {
       case true => {
@@ -153,4 +161,5 @@ object WebDriverPool {
       driver
     }
   }
+
 }
