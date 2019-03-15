@@ -142,7 +142,8 @@ class ZafiraReporter extends Reporter with Util {
         })
         if (ZAFIRA_RERUN_FAILURES) {
           println("rerun failures")
-         // ExcludeTestsForRerun.excludeTestsForRerun(event, testRunResults, configurator)
+
+          configureFailedTests(event, testRunResults)
         }
       }
       else {
@@ -177,6 +178,17 @@ class ZafiraReporter extends Reporter with Util {
         ZAFIRA_ENABLED = false
         LOGGER.error("Undefined error during test run registration!", e.printStackTrace())
     }
+
+  }
+
+  def configureFailedTests(event: RunStarting, testRunResults: Array[TestType]): Unit = {
+    var testNamesRerun = new util.ArrayList[String]
+
+    for (test <- testRunResults) {
+      if (test.isNeedRerun) testNamesRerun.add(test.getName)
+    }
+
+    println("Tests needs rerun "  + testNamesRerun.toString);
 
   }
 
