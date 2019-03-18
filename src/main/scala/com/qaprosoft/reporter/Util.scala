@@ -1,6 +1,8 @@
 package com.qaprosoft.reporter
 
+import java.util
 import java.util.UUID
+
 import com.qaprosoft.zafira.config.CIConfig
 import org.slf4j.ext.XLoggerFactory
 
@@ -15,7 +17,7 @@ trait Util {
   val ZAFIRA_REPORT_SHOW_STACKTRACE = sys.props.getOrElse("zafira_report_show_stacktrace", true).asInstanceOf[Boolean]
   val ZAFIRA_CONFIGURATOR = sys.props.getOrElse("zafira_configurator", "com.qaprosoft.zafira.config.DefaultConfigurator")
   val ZAFIRA_RUN_ID_PARAM = "zafira_run_id"
-  var TESTS_TO_RERUN = sys.props.getOrElse("tests_to_rerun", "unknown")
+  var TESTS_TO_RERUN = sys.props.getOrElse("tests_to_rerun", null)
   val SUITE_NAME =  sys.props.getOrElse("suite_name","unknown")
 
   var CI_URL = sys.props.getOrElse("ci_url",null)
@@ -47,5 +49,7 @@ trait Util {
   }
 
   val suiteLogger = XLoggerFactory.getXLogger(this.getClass)
+
+  var sharable = new util.ArrayList[String]
 
 }

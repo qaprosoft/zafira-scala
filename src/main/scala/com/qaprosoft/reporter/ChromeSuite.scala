@@ -154,13 +154,15 @@ object WebDriverPool {
     }
   }
 
+
   override def withFixture(test: NoArgTest) = {
-    var outcome:Outcome = null
-    if(TESTS_TO_RERUN.contains(test.name)) {
-      println(test.name + " is reruning")
-      outcome = super.withFixture(test)
-    } else println(test.name + " is already passed")
-    outcome
+    println("Tests needs rerun 2 "  + sharable)
+
+    if(sharable.contains(test.name)){
+      super.withFixture(test)
+    }
+     else println(test.name + " is already passed")
+    null
   }
 
 }
