@@ -156,9 +156,9 @@ object WebDriverPool {
 
 
   override def withFixture(test: NoArgTest) = {
-    println("Tests needs rerun 2 "  + sharable)
+    println("Tests needs rerun 2 "  + sharable.toString)
 
-    if(sharable.contains(test.name)){
+    if(sharable.contains(test.name) && (ZAFIRA_RERUN_FAILURES)){
       super.withFixture(test)
     }
      else println(test.name + " is already passed")

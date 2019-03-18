@@ -146,7 +146,7 @@ class ZafiraReporter extends Reporter with Util {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
           sharable = testNamesRerun
-          println("Tests needs rerun 1 "  + sharable)
+          println("Tests needs rerun 1 "  + sharable.toString)
 
           }
       }
