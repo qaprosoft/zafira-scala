@@ -158,6 +158,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
   override def withFixture(test: NoArgTest) = {
     println("Tests needs rerun 2 "  + sharable.toString)
     if(ZAFIRA_RERUN_FAILURES){
+      println("ZAFIRA_RERUN_FAILURES "  + ZAFIRA_RERUN_FAILURES.toString)
       if(sharable.contains(test.name)){
         super.withFixture(test)
       } else println(test.name + " is already passed before rerun")
