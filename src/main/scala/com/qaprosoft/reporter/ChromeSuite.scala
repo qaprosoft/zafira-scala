@@ -99,16 +99,16 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Util with B
   }
 
 
-object WebDriverPool {
-  lazy val seleniumGridConfig = seleniumGrid
+  object WebDriverPool {
+    lazy val seleniumGridConfig = seleniumGrid
 
-  var pool: Option[GenericObjectPool[WebDriver]] = if (seleniumGridConfig.enabled.toBoolean) {
-    None
-  } else {
-    val maxActive = sys.props.getOrElse("dataloader.threats.number", "6").toInt
-    Some(new GenericObjectPool[WebDriver](new RemoteWebDriverFactory, maxActive))
+    var pool: Option[GenericObjectPool[WebDriver]] = if (seleniumGridConfig.enabled.toBoolean) {
+      None
+    } else {
+      val maxActive = sys.props.getOrElse("dataloader.threats.number", "6").toInt
+      Some(new GenericObjectPool[WebDriver](new RemoteWebDriverFactory, maxActive))
+    }
   }
-}
 
   class RemoteWebDriverFactory extends PoolableObjectFactory[WebDriver] {
     val logger = XLoggerFactory.getXLogger(this.getClass)
@@ -157,11 +157,12 @@ object WebDriverPool {
 
   override def withFixture(test: NoArgTest) = {
     println("Tests needs rerun 2 "  + sharable.toString)
-
-    if(sharable.contains(test.name) && (ZAFIRA_RERUN_FAILURES)){
-      super.withFixture(test)
+    if(ZAFIRA_RERUN_FAILURES){
+      if(sharable.contains(test.name)){
+        super.withFixture(test)
+      } else println(test.name + " is already passed before rerun")
     }
-     else println(test.name + " is already passed")
+    else  super.withFixture(test)
     null
   }
 
