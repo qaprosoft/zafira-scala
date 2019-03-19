@@ -24,8 +24,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
 
   private val LOGGER = LoggerFactory.getLogger(classOf[ZafiraReporter])
 
-  var sharable = new util.ArrayList[String]
-
   var parentJob: JobType = null
   var user: UserType = new UserType
   var suite: TestSuiteType = null
