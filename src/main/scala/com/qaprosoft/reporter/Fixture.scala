@@ -15,7 +15,10 @@ trait Fixture extends TestSuite with Util{
       println("ZAFIRA_RERUN_FAILURES " + ZAFIRA_RERUN_FAILURES.toString)
       if (sharable.contains(test.name)) {
         status = super.withFixture(test)
-      } else println(test.name + " is already passed before rerun")
+      } else {
+        println(test.name + " is already passed before rerun")
+        status = status.toSucceeded
+      }
     }
     else  status = super.withFixture(test)
     return status
