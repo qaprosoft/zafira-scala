@@ -31,7 +31,7 @@ trait Util {
   var GIT_URL = sys.props.getOrElse("git_url", "https://github.com/qaprosoft/zafira-scala")
 
   var JIRA_SUITE_ID = sys.props.getOrElse("jira_suite_id", null)
-  var testNamesRerun:util.ArrayList[String] = _
+  val testNamesRerun:util.ArrayList[String] = new util.ArrayList[String]
 
   val ciConfig: CIConfig = {
     val ci = new CIConfig

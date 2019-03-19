@@ -6,7 +6,7 @@ trait Fixture extends TestSuite with Util{
 
   override def withFixture(test: NoArgTest):Outcome = {
     var status:Outcome = null
-
+    println("Tests need rerun")
     if (ZAFIRA_RERUN_FAILURES) {
       println("Tests need rerun" + testNamesRerun.toString)
       if (testNamesRerun.contains(test.name)) {

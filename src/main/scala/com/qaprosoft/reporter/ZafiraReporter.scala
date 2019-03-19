@@ -139,7 +139,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
           registeredTests.put(test.getName, test)
         })
         if (ZAFIRA_RERUN_FAILURES) {
-           testNamesRerun = new util.ArrayList[String]
           for (test <- testRunResults) {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
