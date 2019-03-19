@@ -12,12 +12,11 @@ trait Util {
   val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", null)
   val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token",null)
   val ZAFIRA_PROJECT = sys.props.getOrElse("zafira_project", "UNKNOWN")
-  var ZAFIRA_RERUN_FAILURES:Boolean = sys.props.getOrElse("rerun_failures", false).asInstanceOf[Boolean]
+  var ZAFIRA_RERUN_FAILURES = sys.props.getOrElse("rerun_failures", false).toString.asInstanceOf[Boolean]
   val ZAFIRA_REPORT_EMAILS = sys.props.getOrElse("zafira_report_emails", true).asInstanceOf[Boolean]
   val ZAFIRA_REPORT_SHOW_STACKTRACE = sys.props.getOrElse("zafira_report_show_stacktrace", true).asInstanceOf[Boolean]
   val ZAFIRA_CONFIGURATOR = sys.props.getOrElse("zafira_configurator", "com.qaprosoft.zafira.config.DefaultConfigurator")
   val ZAFIRA_RUN_ID_PARAM = "zafira_run_id"
-  var TESTS_TO_RERUN = sys.props.getOrElse("tests_to_rerun", null)
   val SUITE_NAME =  sys.props.getOrElse("suite_name","unknown")
 
   var CI_URL = sys.props.getOrElse("ci_url",null)
