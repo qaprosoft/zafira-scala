@@ -31,7 +31,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
   var test:TestType = null
   var registeredTests: util.Map[String, TestType] = new util.HashMap[String, TestType]
 
-  var classesToRerun: util.Set[String] = new util.HashSet[String]
   val marshaller = JAXBContext.newInstance(classOf[ConfigurationType]).createMarshaller
   val configurator = Class.forName(ZAFIRA_CONFIGURATOR).newInstance.asInstanceOf[IConfigurator]
 
@@ -39,7 +38,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
   private val threadTest = new ThreadLocal[TestType]
 
   val zafiraClient:ZafiraClient = initializeZafira
-  var testNamesRerun = new util.ArrayList[String]
 
   def apply(event: Event) {
     event match {
@@ -137,18 +135,14 @@ class ZafiraReporter extends Reporter with Util with Fixture {
         var response = zafiraClient.startTestRun(run)
         run = response.getObject
         var testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
-//        testRunResults.foreach(test => {
-//          registeredTests.put(test.getName, test)
-//          if (test.isNeedRerun) classesToRerun.add(test.getTestClass)
-//        })
+        testRunResults.foreach(test => {
+          registeredTests.put(test.getName, test)
+        })
         if (ZAFIRA_RERUN_FAILURES) {
-          println("rerun failures")
           for (test <- testRunResults) {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
-          sharable = testNamesRerun
-          println("Tests needs rerun 1 "  + sharable.toString)
-
+          println("Tests that need rerun: "  + testNamesRerun.toString)
           }
       }
       else {
@@ -239,17 +233,14 @@ class ZafiraReporter extends Reporter with Util with Fixture {
 
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
       // Search already registered test!
-      println("4")
             if (registeredTests.containsKey(testName)) {
-              println("5")
+              println("registeredTests: " + registeredTests.toString)
               startedTest = registeredTests.get(testName)
               // Skip already passed tests if rerun failures enabled
               if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)
-              println("6")
               startedTest.setFinishTime(event.timeStamp)
               startedTest.setStartTime(new Date().getTime)
               startedTest.setCiTestId(getThreadCiTestId)
-              startedTest.setTags(null)
               startedTest = zafiraClient.registerTestRestart(startedTest)
             }
       if (startedTest == null) { //new test run registration
