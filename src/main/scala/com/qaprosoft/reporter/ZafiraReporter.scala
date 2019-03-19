@@ -139,6 +139,7 @@ class ZafiraReporter extends Reporter with Util with Fixture {
           registeredTests.put(test.getName, test)
         })
         if (ZAFIRA_RERUN_FAILURES) {
+           testNamesRerun = new util.ArrayList[String]
           for (test <- testRunResults) {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
@@ -258,8 +259,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
         LOGGER.error("Undefined error during test case/method start!", e.printStackTrace())
     }
   }
-
-
 
   val getThreadCiTestId: String = {
     if (StringUtils.isEmpty(threadCiTestId.get)) threadCiTestId.set(UUID.randomUUID.toString)

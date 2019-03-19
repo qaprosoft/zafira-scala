@@ -1,12 +1,8 @@
 package com.qaprosoft.reporter
 
-import java.util
-
 import org.scalatest._
 
 trait Fixture extends TestSuite with Util{
-
-  var testNamesRerun = new util.ArrayList[String]
 
   override def withFixture(test: NoArgTest):Outcome = {
     var status:Outcome = null

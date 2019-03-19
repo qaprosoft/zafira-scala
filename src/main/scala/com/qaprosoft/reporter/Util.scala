@@ -1,5 +1,6 @@
 package com.qaprosoft.reporter
 
+import java.util
 import java.util.UUID
 
 import com.qaprosoft.zafira.config.CIConfig
@@ -30,6 +31,7 @@ trait Util {
   var GIT_URL = sys.props.getOrElse("git_url", "https://github.com/qaprosoft/zafira-scala")
 
   var JIRA_SUITE_ID = sys.props.getOrElse("jira_suite_id", null)
+  var testNamesRerun:util.ArrayList[String] = _
 
   val ciConfig: CIConfig = {
     val ci = new CIConfig
