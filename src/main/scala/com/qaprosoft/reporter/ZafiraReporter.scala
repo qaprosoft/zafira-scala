@@ -17,9 +17,10 @@ import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
+
 import com.qaprosoft.zafira.models.db.Status
 
-class ZafiraReporter extends Reporter with Util {
+class ZafiraReporter extends Reporter with Util with Fixture {
 
   private val LOGGER = LoggerFactory.getLogger(classOf[ZafiraReporter])
 

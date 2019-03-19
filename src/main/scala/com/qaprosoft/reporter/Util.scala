@@ -1,6 +1,5 @@
 package com.qaprosoft.reporter
 
-import java.util
 import java.util.UUID
 
 import com.qaprosoft.zafira.config.CIConfig
@@ -48,7 +47,4 @@ trait Util {
   }
 
   val suiteLogger = XLoggerFactory.getXLogger(this.getClass)
-
-  var sharable = new util.ArrayList[String]
-
 }
