@@ -14,6 +14,7 @@ class CheeseTest extends FunSuite with ChromeSuite{
     textField("q").value = "Cheese!"
     suiteLogger.info("Cheese query is typed")
     submit()
+    println("Cheese started is executed")
     suiteLogger.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
   }
@@ -25,6 +26,7 @@ class CheeseTest extends FunSuite with ChromeSuite{
     textField("q").value = "Cheese!"
     suiteLogger.info("Cheese query is typed")
     submit()
+    println("Cheese in progress is executed")
     suiteLogger.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
   }
@@ -36,6 +38,7 @@ class CheeseTest extends FunSuite with ChromeSuite{
     textField("q").value = "Cheese!"
     suiteLogger.info("Cheese query is typed")
     submit()
+    println("Cheese finished is executed")
     suiteLogger.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
   }
