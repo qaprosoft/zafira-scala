@@ -6,10 +6,10 @@ trait Fixture extends TestSuite with Util{
 
   override def withFixture(test: NoArgTest):Outcome = {
     var status:Outcome = null
-    println("Tests need rerun")
+    println("Tests on start fixture")
     if (ZAFIRA_RERUN_FAILURES) {
-      println("Tests need rerun" + testNamesRerun.toString)
-      if (testNamesRerun.contains(test.name)) {
+      println("Tests need rerun" + singleton.testNamesRerun.toString)
+      if (singleton.testNamesRerun.contains(test.name)) {
         status = super.withFixture(test)
       } else {
         println(test.name + " is already passed before rerun, it will not be executed")

@@ -140,9 +140,9 @@ class ZafiraReporter extends Reporter with Util with Fixture {
         })
         if (ZAFIRA_RERUN_FAILURES) {
           for (test <- testRunResults) {
-            if (test.isNeedRerun) testNamesRerun.add(test.getName)
+            if (test.isNeedRerun) singleton.testNamesRerun.add(test.getName)
           }
-          println("Tests that need rerun: "  + testNamesRerun.toString)
+          println("Tests that need rerun: "  + singleton.testNamesRerun.toString)
           }
       }
       else {

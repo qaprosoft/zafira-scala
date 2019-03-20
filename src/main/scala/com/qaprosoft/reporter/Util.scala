@@ -31,7 +31,6 @@ trait Util {
   var GIT_URL = sys.props.getOrElse("git_url", "https://github.com/qaprosoft/zafira-scala")
 
   var JIRA_SUITE_ID = sys.props.getOrElse("jira_suite_id", null)
-  val testNamesRerun:util.ArrayList[String] = new util.ArrayList[String]
 
   val ciConfig: CIConfig = {
     val ci = new CIConfig
@@ -49,4 +48,9 @@ trait Util {
   }
 
   val suiteLogger = XLoggerFactory.getXLogger(this.getClass)
+
+  object singleton{
+    val testNamesRerun:util.ArrayList[String] = new util.ArrayList[String]
+  }
+
 }
