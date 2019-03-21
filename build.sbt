@@ -11,7 +11,6 @@ libraryDependencies ++= Seq(
     "org.scalatest" % "scalatest_2.12" % "3.0.5",
     "org.scalactic" %% "scalactic" % "3.0.5",
     "com.sun.jersey" % "jersey-core" % "1.19",
-    "ch.qos.logback" % "logback-classic" % "1.1.3",
     "com.typesafe" % "config" % "1.2.1",
     "org.seleniumhq.selenium" % "selenium-java" % "3.11.0" % "test",
     "org.apache.commons" % "commons-lang3" % "3.0",
