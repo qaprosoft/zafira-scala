@@ -17,12 +17,10 @@ import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
-
+import com.qaprosoft.zafira.log.ZafiraLogAppender
 import com.qaprosoft.zafira.models.db.Status
 
 class ZafiraReporter extends Reporter with Util with Fixture {
-
-  private val LOGGER = LoggerFactory.getLogger(classOf[ZafiraReporter])
 
   var parentJob: JobType = null
   var user: UserType = new UserType
@@ -218,7 +216,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
   def onTestStart(event: TestStarting): Unit = {
     if (!ZAFIRA_ENABLED) return
     try {
-
       var startedTest:TestType = null
       val testName = event.testName
 

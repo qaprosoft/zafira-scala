@@ -11,10 +11,9 @@ import org.openqa.selenium.remote.{CapabilityType, DesiredCapabilities, LocalFil
 import org.openqa.selenium.support.ThreadGuard
 import org.scalatest._
 import org.scalatest.selenium.{Driver, WebBrowser}
-import org.slf4j.ext.XLoggerFactory
 
 
-trait ChromeSuite extends TestSuite with WebBrowser with Driver with Fixture  with BeforeAndAfterAll{
+trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndAfterAll with Util{
   this: Suite with WebBrowser with Driver =>
 
   lazy val seleniumGridConfig = seleniumGrid
@@ -40,16 +39,16 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Fixture  wi
         capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true)
 
         try {
-          suiteLogger.info("Try to create Grid WebDriver.")
+          LOGGER.info("Try to create Grid WebDriver.")
           gridWebDriver(capability)
         } catch {
           case e: Throwable => {
-            suiteLogger.warn("Grid WebDriver failed, try again.")
+            LOGGER.warn("Grid WebDriver failed, try again.")
             try {
               gridWebDriver(capability)
             } catch {
               case e: Throwable => {
-                suiteLogger.warn("Grid WebDriver failed 2x, try 3rd time.")
+                LOGGER.warn("Grid WebDriver failed 2x, try 3rd time.")
                 gridWebDriver(capability)
               }
             }
@@ -62,7 +61,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Fixture  wi
         WebDriverPool.pool.get.borrowObject()
       }
     }
-    suiteLogger.info(s"CHECKING OUT DRIVER:${driver.hashCode()}")
+    LOGGER.info(s"CHECKING OUT DRIVER:${driver.hashCode()}")
 
     ThreadGuard.protect(driver)
   }
@@ -71,7 +70,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Fixture  wi
     try {
       webDriver.quit()
     } catch {
-      case _: Exception => suiteLogger.info("[URGENT] could not de-allocate webdriver. Could be Selenium Grid issue")
+      case _: Exception => LOGGER.info("[URGENT] could not de-allocate webdriver. Could be Selenium Grid issue")
     }
   }
 
@@ -81,7 +80,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Fixture  wi
       case true => releaseWebDriver(webDriver)
       case _ => WebDriverPool.pool.get.returnObject(webDriver)
     }
-    suiteLogger.info(s"CHECKED IN DRIVER:${webDriver.hashCode()}")
+    LOGGER.info(s"CHECKED IN DRIVER:${webDriver.hashCode()}")
   }
 
 
@@ -111,10 +110,9 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver with Fixture  wi
   }
 
   class RemoteWebDriverFactory extends PoolableObjectFactory[WebDriver] {
-    val logger = XLoggerFactory.getXLogger(this.getClass)
 
     override def destroyObject(obj: WebDriver): Unit = {
-      logger.info(s"Destroying DRIVER: ${obj.hashCode()}")
+      LOGGER.info(s"Destroying DRIVER: ${obj.hashCode()}")
       obj.quit()
     }
 

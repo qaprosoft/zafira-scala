@@ -4,9 +4,12 @@ import java.util
 import java.util.UUID
 
 import com.qaprosoft.zafira.config.CIConfig
-import org.slf4j.ext.XLoggerFactory
+import com.typesafe.scalalogging._
+import org.slf4j.LoggerFactory
 
 trait Util {
+
+
 
   var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).asInstanceOf[Boolean]
   val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", null)
@@ -47,7 +50,7 @@ trait Util {
     ci
   }
 
-  val suiteLogger = XLoggerFactory.getXLogger(this.getClass)
+  val LOGGER = Logger(LoggerFactory.getLogger(this.getClass))
 
   object singleton{
     val testNamesRerun:util.ArrayList[String] = new util.ArrayList[String]

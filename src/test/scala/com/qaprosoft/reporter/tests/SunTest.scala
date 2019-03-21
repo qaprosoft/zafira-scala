@@ -1,9 +1,9 @@
 package com.qaprosoft.reporter.tests
 
-import com.qaprosoft.reporter.{ChromeSuite, Fixture}
+import com.qaprosoft.reporter.{ChromeSuite, Fixture, Util}
 import org.scalatest._
 
-  class SunTest extends FunSuite with ChromeSuite with Fixture {
+  class SunTest extends FunSuite with ChromeSuite with Util {
 
     val host = "http://www.google.com/"
 

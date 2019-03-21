@@ -18,9 +18,9 @@ libraryDependencies ++= Seq(
     "org.seleniumhq.selenium" % "selenium-java" % "3.11.0" % "test",
     "org.apache.commons" % "commons-lang3" % "3.0",
     "org.apache.commons" % "commons-configuration2" % "2.4",
-    "org.slf4j" % "slf4j-ext" % "1.6.4",
-    "org.slf4j" % "slf4j-log4j12" % "1.6.4",
-    "org.slf4j" % "slf4j-nop" % "1.6.4",
+//    "org.slf4j" % "slf4j-ext" % "1.6.4",
+//    "org.slf4j" % "slf4j-log4j12" % "1.6.4",
+//    "org.slf4j" % "slf4j-nop" % "1.6.4",
     "javax.xml.bind" % "jaxb-api" % "2.3.1",
     "com.sun.xml.bind" % "jaxb-impl" % "2.3.2",
     "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
@@ -33,6 +33,8 @@ libraryDependencies ++= Seq(
     "com.qaprosoft" % "zafira-client" % "3.3.74-SNAPSHOT",
     "commons-beanutils" % "commons-beanutils" % "1.9.3",
     "org.seleniumhq.selenium" % "selenium-java" % "3.11.0",
-    "commons-pool" % "commons-pool" % "1.6"
+    "commons-pool" % "commons-pool" % "1.6",
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 
 )
