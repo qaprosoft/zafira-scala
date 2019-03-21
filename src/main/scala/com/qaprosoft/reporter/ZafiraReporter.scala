@@ -98,7 +98,7 @@ class ZafiraReporter extends Reporter with Util with Fixture {
     // Exit on initialization failure
     if (!ZAFIRA_ENABLED) return
     try {
-
+      println("ZAFIRA_URL here " + ZAFIRA_URL)
       zafiraClient.initProject(ZAFIRA_PROJECT)
       user = zafiraClient.getUserProfile.getObject
       val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
