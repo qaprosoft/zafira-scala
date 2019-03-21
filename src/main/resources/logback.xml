@@ -3,34 +3,27 @@
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</Pattern>
+            <Pattern>%date %level %logger{10} [%file:%line] %msg%n</Pattern>
         </layout>
     </appender>
 
     <appender name="ZAFIRA" class="com.qaprosoft.zafira.log.ZafiraLogAppender">
         <layout class="com.qaprosoft.zafira.log.JSONLayout">
-            <Pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</Pattern>
+            <Pattern>%date %level %logger{10} [%file:%line] %msg%n</Pattern>
         </layout>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>application.log</file>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</Pattern>
+            <Pattern>%date %level %logger{10} [%file:%line] %msg%n</Pattern>
         </layout>
     </appender>
 
-    <root level="info" >
+    <root level="TRACE" >
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ZAFIRA" />
         <appender-ref ref="FILE" />
     </root>
-
-    <logger name="log"  additivity="true" >
-        <level value="trace" />
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="ZAFIRA" />
-        <appender-ref ref="FILE" />
-    </logger>
 
 </configuration>

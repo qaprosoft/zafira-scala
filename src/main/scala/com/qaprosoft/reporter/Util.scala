@@ -1,6 +1,5 @@
 package com.qaprosoft.reporter
 
-import java.util
 import java.util.UUID
 
 import com.qaprosoft.zafira.config.CIConfig
@@ -9,15 +8,15 @@ import org.slf4j.LoggerFactory
 
 trait Util {
 
+  val LOGGER = Logger(LoggerFactory.getLogger(this.getClass))
 
-
-  var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).asInstanceOf[Boolean]
+  var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).toString.toBoolean
   val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", null)
   val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token",null)
   val ZAFIRA_PROJECT = sys.props.getOrElse("zafira_project", "UNKNOWN")
   var ZAFIRA_RERUN_FAILURES = sys.props.getOrElse("rerun_failures", false).toString.toBoolean
-  val ZAFIRA_REPORT_EMAILS = sys.props.getOrElse("zafira_report_emails", true).asInstanceOf[Boolean]
-  val ZAFIRA_REPORT_SHOW_STACKTRACE = sys.props.getOrElse("zafira_report_show_stacktrace", true).asInstanceOf[Boolean]
+  val ZAFIRA_REPORT_EMAILS = sys.props.getOrElse("zafira_report_emails", true).toString.toBoolean
+  val ZAFIRA_REPORT_SHOW_STACKTRACE = sys.props.getOrElse("zafira_report_show_stacktrace", true).toString.toBoolean
   val ZAFIRA_CONFIGURATOR = sys.props.getOrElse("zafira_configurator", "com.qaprosoft.zafira.config.DefaultConfigurator")
   val ZAFIRA_RUN_ID_PARAM = "zafira_run_id"
   val SUITE_NAME =  sys.props.getOrElse("suite_name","unknown")
@@ -48,12 +47,6 @@ trait Util {
     ci.setGitCommit(GIT_COMMIT)
     ci.setGitUrl(GIT_URL)
     ci
-  }
-
-  val LOGGER = Logger(LoggerFactory.getLogger(this.getClass))
-
-  object singleton{
-    val testNamesRerun:util.ArrayList[String] = new util.ArrayList[String]
   }
 
 }

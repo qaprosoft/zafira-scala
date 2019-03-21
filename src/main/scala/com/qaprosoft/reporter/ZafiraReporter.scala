@@ -28,6 +28,7 @@ class ZafiraReporter extends Reporter with Util with Fixture {
   var run:TestRunType = null
   var test:TestType = null
   var registeredTests: util.Map[String, TestType] = new util.HashMap[String, TestType]
+  val testNamesRerun = new util.ArrayList[String]()
 
   val marshaller = JAXBContext.newInstance(classOf[ConfigurationType]).createMarshaller
   val configurator = Class.forName(ZAFIRA_CONFIGURATOR).newInstance.asInstanceOf[IConfigurator]
@@ -138,9 +139,9 @@ class ZafiraReporter extends Reporter with Util with Fixture {
         })
         if (ZAFIRA_RERUN_FAILURES) {
           for (test <- testRunResults) {
-            if (test.isNeedRerun) singleton.testNamesRerun.add(test.getName)
+            if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
-          println("Tests that need rerun: "  + singleton.testNamesRerun.toString)
+          println("Tests that need rerun: "  + testNamesRerun.toString)
           }
       }
       else {
