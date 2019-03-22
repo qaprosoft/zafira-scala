@@ -20,6 +20,11 @@
         </layout>
     </appender>
 
+    <logger name="com.qaprosoft.reporter.Util" additivity="false">
+        <level value="TRACE"/>
+        <appender-ref ref="ZAFIRA"/>
+    </logger>
+
     <root level="TRACE" >
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ZAFIRA" />
