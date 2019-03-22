@@ -3,12 +3,11 @@ package com.qaprosoft.reporter
 import java.util.UUID
 
 import com.qaprosoft.zafira.config.CIConfig
-import com.typesafe.scalalogging._
-import org.slf4j.LoggerFactory
+import org.apache.log4j.Logger
 
 trait Util {
 
-  val LOGGER = Logger(LoggerFactory.getLogger(this.getClass))
+  val LOGGER = Logger.getLogger(this.getClass)
 
   var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).toString.toBoolean
   val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", "http://demo.qaprosoft.com/zafira-ws")

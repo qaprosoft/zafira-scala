@@ -9,7 +9,6 @@
 
     <appender name="ZAFIRA" class="com.qaprosoft.zafira.log.ZafiraLogAppender">
         <layout class="com.qaprosoft.zafira.log.JSONLayout">
-            <remoteHost>demo.qaprosoft.com</remoteHost>
             <Pattern> [%level] %logger{10} [%file:%line] %msg%n</Pattern>
         </layout>
     </appender>

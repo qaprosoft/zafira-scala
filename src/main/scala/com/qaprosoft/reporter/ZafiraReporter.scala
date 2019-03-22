@@ -16,8 +16,6 @@ import com.qaprosoft.zafira.models.dto.TestType
 import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
-import org.slf4j.LoggerFactory
-import com.qaprosoft.zafira.log.ZafiraLogAppender
 import com.qaprosoft.zafira.models.db.Status
 
 class ZafiraReporter extends Reporter with Util {
@@ -170,7 +168,7 @@ class ZafiraReporter extends Reporter with Util {
     } catch {
       case e: Throwable =>
         ZAFIRA_ENABLED = false
-        LOGGER.error("Undefined error during test run registration!", e.printStackTrace())
+        LOGGER.error("Undefined error during test run registration!", e)
     }
 
   }
@@ -205,7 +203,7 @@ class ZafiraReporter extends Reporter with Util {
       zafiraClient.registerTestRunResults(run)
     } catch {
       case e: Throwable =>
-        LOGGER.error("Unable to finish test run correctly", e.printStackTrace())
+        LOGGER.error("Unable to finish test run correctly", e)
     }
   }
 
@@ -248,7 +246,7 @@ class ZafiraReporter extends Reporter with Util {
       registeredTests.put(event.testName, startedTest)
     } catch {
       case e: Throwable =>
-        LOGGER.error("Undefined error during test case/method start!", e.printStackTrace())
+        LOGGER.error("Undefined error during test case/method start!", e)
     }
   }
 
@@ -264,7 +262,7 @@ class ZafiraReporter extends Reporter with Util {
       if ((!rs.getStatus.equals(200))  && rs.getObject == null) throw new RuntimeException("Unable to register test " + rs.getObject.getName + " for zafira service: " + ZAFIRA_URL)
     } catch {
       case e: Throwable =>
-        LOGGER.error("Undefined error during test case/method finish!", e.printStackTrace())
+        LOGGER.error("Undefined error during test case/method finish!", e)
     }
   }
 

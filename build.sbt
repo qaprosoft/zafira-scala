@@ -28,7 +28,9 @@ libraryDependencies ++= Seq(
     "commons-beanutils" % "commons-beanutils" % "1.9.3",
     "org.seleniumhq.selenium" % "selenium-java" % "3.11.0",
     "commons-pool" % "commons-pool" % "1.6",
-    "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+//    "ch.qos.logback" % "logback-classic" % "1.2.3",
+//    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+      "log4j" % "log4j" % "1.2.17"
+
 
 )
