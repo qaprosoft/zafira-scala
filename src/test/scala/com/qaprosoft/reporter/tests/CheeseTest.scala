@@ -11,37 +11,28 @@ class CheeseTest extends FunSuite with ChromeSuite  with Util {
 
   test("Cheese started") {
     go to (host)
-    LOGGER.info("Google is opened")
+    LOGGER.info("Cheese started test")
     click on "q"
     textField("q").value = "Cheese!"
-    LOGGER.info("Cheese query is typed")
     submit()
-    println("Cheese started is executed")
-    LOGGER.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
   }
 
   test("Cheese in progress") {
     go to (host)
-    LOGGER.info("Google is opened")
+    LOGGER.info("Cheese in progress test")
     click on "q"
     textField("q").value = "Cheese!"
-    LOGGER.info("Cheese query is typed")
     submit()
-    println("Cheese in progress is executed")
-    LOGGER.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
   }
 
   test("Cheese finished") {
     go to (host)
-    LOGGER.info("Google is opened")
+    LOGGER.info("Cheese finished test")
     click on "q"
     textField("q").value = "Cheese!"
-    LOGGER.info("Cheese query is typed")
     submit()
-    println("Cheese finished is executed")
-    LOGGER.info("Submit button is clicked")
     assert(pageTitle contains ("Cheese!"))
   }
 

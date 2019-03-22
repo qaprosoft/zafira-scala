@@ -11,8 +11,8 @@ trait Util {
   val LOGGER = Logger(LoggerFactory.getLogger(this.getClass))
 
   var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).toString.toBoolean
-  val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", null)
-  val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token",null)
+  val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", "http://demo.qaprosoft.com/zafira-ws")
+  val ZAFIRA_ACCESS_TOKEN = sys.props.getOrElse("zafira_access_token","eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwicGFzc3dvcmQiOiJ6WHRoVy9CNS9CZk9QRW4xRktMVy8vbmpqbkZFSGJhZSIsInRlbmFudCI6InphZmlyYSIsImV4cCI6MTMwMzg2OTAyMzg3fQ.8xDrHUmtahzBrbyKrAX-Xkr9cUZXpfH5aC-rDh1oQZGWCfVME76YEsUPPoozOOfhHKg6AzV56w-BEq9UtGz_AA")
   val ZAFIRA_PROJECT = sys.props.getOrElse("zafira_project", "UNKNOWN")
   var ZAFIRA_RERUN_FAILURES = sys.props.getOrElse("rerun_failures", false).toString.toBoolean
   val ZAFIRA_REPORT_EMAILS = sys.props.getOrElse("zafira_report_emails", true).toString.toBoolean

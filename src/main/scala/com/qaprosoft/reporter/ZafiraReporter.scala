@@ -98,7 +98,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
     // Exit on initialization failure
     if (!ZAFIRA_ENABLED) return
     try {
-      println("ZAFIRA_URL here " + ZAFIRA_URL)
       zafiraClient.initProject(ZAFIRA_PROJECT)
       user = zafiraClient.getUserProfile.getObject
       val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
@@ -114,14 +113,12 @@ class ZafiraReporter extends Reporter with Util with Fixture {
         parentJob = zafiraClient.registerJob(ciConfig.getCiParentUrl, anonymous.getId)
       }
 
-      println("ci run id " + ciConfig.getCiRunId)
       // Searching for existing test run with same CI run id in case of rerun
       if (!StringUtils.isEmpty(ciConfig.getCiRunId)) {
         val response = zafiraClient.getTestRunByCiRunId(ciConfig.getCiRunId)
         run = response.getObject
       }
       if (run != null) {
-        println("run != null ")
         // Already discovered run with the same CI_RUN_ID, it is re-run functionality!
         // Reset build number for re-run to map to the latest rerun build
         run.setBuildNumber(ciConfig.getCiBuild)
@@ -141,7 +138,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
           for (test <- testRunResults) {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
-          println("Tests that need rerun: "  + testNamesRerun.toString)
           }
       }
       else {
@@ -232,7 +228,6 @@ class ZafiraReporter extends Reporter with Util with Fixture {
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
       // Search already registered test!
             if (registeredTests.containsKey(testName)) {
-              println("registeredTests: " + registeredTests.toString)
               startedTest = registeredTests.get(testName)
               // Skip already passed tests if rerun failures enabled
               if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)

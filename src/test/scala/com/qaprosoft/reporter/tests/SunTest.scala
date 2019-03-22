@@ -12,7 +12,7 @@ import org.scalatest._
       click on "q"
       textField("q").value = "Sun"
       submit()
-      println("Sun started is executed")
+      LOGGER.info("Sun started test")
       assert(pageTitle contains ("sdsdsd"))
     }
 
@@ -22,7 +22,7 @@ import org.scalatest._
       click on "q"
       textField("q").value = "Sun"
       submit()
-      println("Sun in progress is executed")
+      LOGGER.info("Sun in progress test")
       assert(pageTitle contains ("Sun"))
     }
 
@@ -32,7 +32,7 @@ import org.scalatest._
       click on "q"
       textField("q").value = "Sun"
       submit()
-      println("Sun finished is executed")
+      LOGGER.info("Sun finished test")
       assert(pageTitle contains ("Sun"))
     }
 
