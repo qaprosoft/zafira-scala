@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 import com.qaprosoft.zafira.log.ZafiraLogAppender
 import com.qaprosoft.zafira.models.db.Status
 
-class ZafiraReporter extends Reporter with Util with Fixture {
+class ZafiraReporter extends Reporter with Util {
 
   var parentJob: JobType = null
   var user: UserType = new UserType
