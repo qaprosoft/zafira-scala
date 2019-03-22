@@ -28,9 +28,18 @@ libraryDependencies ++= Seq(
     "commons-beanutils" % "commons-beanutils" % "1.9.3",
     "org.seleniumhq.selenium" % "selenium-java" % "3.11.0",
     "commons-pool" % "commons-pool" % "1.6",
-//    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    //"ch.qos.logback" % "logback-classic" % "1.2.3",
 //    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
-      "log4j" % "log4j" % "1.2.17"
 
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-scala
+//   "org.apache.logging.log4j" % "log4j-scala" % "11.0" pomOnly(),
+//
+//   "org.apache.logging.log4j" % "log4j-core" % "2.11.2",
+//   "org.apache.logging.log4j" % "log4j-api" % "2.11.2",
+//    "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0"
+
+    "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
+    "org.apache.logging.log4j" % "log4j-api" % "2.11.0",
+    "org.apache.logging.log4j" % "log4j-core" % "2.11.0" % Runtime
 
 )
