@@ -308,6 +308,13 @@ class ZafiraReporter extends Reporter with Util {
         status =  Status.ABORTED
       }
 
+      case event: SuiteAborted => {
+        testName = event.suiteName
+        finishTime = event.timeStamp
+        message = event.message
+        status =  Status.ABORTED
+      }
+
     }
 
     val threadId = Thread.currentThread.getId
