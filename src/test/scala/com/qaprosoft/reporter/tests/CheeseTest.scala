@@ -1,6 +1,5 @@
 package com.qaprosoft.reporter.tests
 
-
 import com.qaprosoft.reporter.{ChromeSuite, Util}
 import org.scalatest._
 
