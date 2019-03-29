@@ -332,15 +332,13 @@ class ZafiraReporter extends Reporter with Util {
     test
   }
 
-  import scala.compat.Platform.EOL
-
   private def getFullStackTrace(event: TestFailed):String = {
     val sb = new StringBuilder
     if (event.throwable.get != null) {
-      sb.append(event.message).append(EOL)
+      sb.append(event.message).append("\n")
       val elems = event.throwable.get.getStackTrace
       for (elem <- elems) {
-        sb.append(EOL).append(elem.toString)
+        sb.append("\n").append(elem.toString)
       }
     }
     if (!StringUtils.isEmpty(sb.toString)) {
