@@ -4,39 +4,35 @@ import com.qaprosoft.reporter._
 import org.apache.log4j.Logger
 import org.scalatest._
 
-  class SunTest extends FunSuite with ChromeSuite {
-
-    val LOG = Logger.getLogger(this.getClass)
+  class SunTest extends FunSuite with ChromeSuite with Util {
 
     val host = "http://www.google.com/"
 
-    test("Sun started") {
-      go to (host)
+    test("Sun1") {
+      go to host
       click on "q"
       textField("q").value = "Sun"
       submit()
-      LOG.info("Sun started test")
-      assert(pageTitle contains ("sdsdsd"))
+      LOGGER.info("Sun1 test")
+      assert(pageTitle contains "sdsdsd")
     }
 
-    test("Sun in progress") {
-      go to (host)
-
+    test("Sun2") {
+      go to host
       click on "q"
       textField("q").value = "Sun"
       submit()
-      LOG.info("Sun in progress test")
-      assert(pageTitle contains ("Sun"))
+      LOGGER.info("Sun2 test")
+      assert(pageTitle contains "Sun")
     }
 
-    test("Sun finished") {
-      go to (host)
-
+    test("Sun3") {
+      go to host
       click on "q"
       textField("q").value = "Sun"
       submit()
-      LOG.info("Sun finished test")
-      assert(pageTitle contains ("Sun"))
+      LOGGER.info("Sun3 test")
+      assert(pageTitle contains "Sun")
     }
 
   }

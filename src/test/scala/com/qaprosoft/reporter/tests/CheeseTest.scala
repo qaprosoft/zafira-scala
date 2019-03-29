@@ -8,31 +8,31 @@ class CheeseTest extends FunSuite with ChromeSuite  with Util {
 
   val host = "http://www.google.com/"
 
-  test("Cheese started") {
-    go to (host)
-    LOGGER.info("Cheese started test")
+  test("Cheese1") {
+    go to host
+    LOGGER.info("Cheese1 test")
     click on "q"
     textField("q").value = "Cheese!"
     submit()
-    assert(pageTitle contains ("Cheese!"))
+    assert(pageTitle contains "Cheese!")
   }
 
-  test("Cheese in progress") {
-    go to (host)
-    LOGGER.info("Cheese in progress test")
+  test("Cheese2") {
+    go to host
+    LOGGER.info("Cheese2 test")
     click on "q"
     textField("q").value = "Cheese!"
     submit()
-    assert(pageTitle contains ("Cheese!"))
+    assert(pageTitle contains "Cheese!")
   }
 
-  test("Cheese finished") {
-    go to (host)
-    LOGGER.info("Cheese finished test")
+  test("Cheese3") {
+    go to host
+    LOGGER.info("Cheese3 test")
     click on "q"
     textField("q").value = "Cheese!"
     submit()
-    assert(pageTitle contains ("Cheese!"))
+    assert(pageTitle contains "Cheese!")
   }
 
 }

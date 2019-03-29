@@ -15,8 +15,8 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "3.14.0",
 
   "com.qaprosoft" % "zafira" % "3.3.51" pomOnly,
-  //"com.qaprosoft" % "zafira-client" % "3.3.51",
-  "com.qaprosoft" % "zafira-client" % "3.3.79-SNAPSHOT",
+  "com.qaprosoft" % "zafira-client" % "3.3.51",
+  //"com.qaprosoft" % "zafira-client" % "3.3.79-SNAPSHOT",
 
   "commons-pool" % "commons-pool" % "1.6",
 
@@ -29,8 +29,7 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "19.0",
   "org.apache.commons" % "commons-configuration2" % "2.1",
   "javax.mail" % "mail" % "1.4.7",
-  "javax.mail" % "javax.mail-api" % "1.5.5"
-
-
+  "javax.mail" % "javax.mail-api" % "1.5.5",
+  "commons-io" % "commons-io" % "2.6"
 
 )

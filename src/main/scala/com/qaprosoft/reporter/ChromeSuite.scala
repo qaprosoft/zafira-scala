@@ -13,7 +13,7 @@ import org.scalatest._
 import org.scalatest.selenium.{Driver, WebBrowser}
 
 
-trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndAfterAll with Util{
+trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndAfterAll with Util with Fixture{
   this: Suite with WebBrowser with Driver =>
 
   lazy val seleniumGridConfig = seleniumGrid
@@ -27,8 +27,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndA
 
   implicit lazy val webDriver: WebDriver = {
     val driver = seleniumGridConfig.enabled.toBoolean match {
-      case true => {
-        // Use selenium grid
+      case true =>
         val capability: DesiredCapabilities = DesiredCapabilities.chrome()
         val options = new ChromeOptions
         //Jenkins has this with out any special work, locally however i needed to add this
@@ -42,31 +41,26 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndA
           LOGGER.info("Try to create Grid WebDriver.")
           gridWebDriver(capability)
         } catch {
-          case e: Throwable => {
+          case e: Throwable =>
             LOGGER.warn("Grid WebDriver failed, try again.")
             try {
               gridWebDriver(capability)
             } catch {
-              case e: Throwable => {
+              case e: Throwable =>
                 LOGGER.warn("Grid WebDriver failed 2x, try 3rd time.")
                 gridWebDriver(capability)
-              }
             }
-          }
-        }
 
-      }
-      case _ => {
-        // Don't use selenium grid
-        WebDriverPool.pool.get.borrowObject()
-      }
+        }
+      case _ => WebDriverPool.pool.get.borrowObject()
+
     }
     LOGGER.info(s"CHECKING OUT DRIVER:${driver.hashCode()}")
 
     ThreadGuard.protect(driver)
   }
 
-  private[this] def releaseWebDriver(webDriver : WebDriver) = {
+  private[this] def releaseWebDriver(webDriver : WebDriver): Unit = {
     try {
       webDriver.quit()
     } catch {
@@ -91,7 +85,7 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndA
     remoteWebDriver
   }
 
-  def logSelenoidVncLink(remoteWebDriver: RemoteWebDriver ) = {
+  def logSelenoidVncLink(remoteWebDriver: RemoteWebDriver ): Unit = {
     val rawSessionId = remoteWebDriver.getSessionId.toString
     println(s"UI Session ID: $rawSessionId")
 
@@ -139,9 +133,9 @@ trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndA
 
       // Specify directory for downloading
 
-      val chromePref: util.HashMap[String, Object] = new util.HashMap();
-      chromePref.put("download.default_directory", sys.props.getOrElse("download.folder", "~/Downloads"));
-      options.setExperimentalOption("prefs", chromePref);
+      val chromePref: util.HashMap[String, Object] = new util.HashMap()
+      chromePref.put("download.default_directory", sys.props.getOrElse("download.folder", "~/Downloads"))
+      options.setExperimentalOption("prefs", chromePref)
 
       //Jenkins has this with out any special work, locally however i needed to add this
       //This was preventing JS Popups

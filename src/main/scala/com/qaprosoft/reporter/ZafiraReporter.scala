@@ -17,14 +17,15 @@ import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
 import com.qaprosoft.zafira.models.db.Status
+import org.apache.commons.configuration2.PropertiesConfiguration
 
 class ZafiraReporter extends Reporter with Util {
 
-  var parentJob: JobType = null
+  var parentJob: JobType = _
   var user: UserType = new UserType
-  var suite: TestSuiteType = null
-  var run:TestRunType = null
-  var test:TestType = null
+  var suite: TestSuiteType = _
+  var run:TestRunType = _
+  var test:TestType = _
   var registeredTests: util.Map[String, TestType] = new util.HashMap[String, TestType]
   val testNamesRerun = new util.ArrayList[String]()
 
@@ -72,7 +73,14 @@ class ZafiraReporter extends Reporter with Util {
   }
 
   private def initializeZafira():ZafiraClient = {
+
+    val pr = new PropertiesConfiguration
+    Thread.currentThread().setContextClassLoader(
+    pr.getClass.getClassLoader
+    )
+
     val zc = new ZafiraClient(ZAFIRA_URL)
+
     try {
       if (ZAFIRA_ENABLED) {
         ZAFIRA_ENABLED = zc.isAvailable
@@ -274,46 +282,32 @@ class ZafiraReporter extends Reporter with Util {
     var status:Status = Status.UNKNOWN
 
     event match {
-      case event: TestFailed => {
+      case event: TestFailed =>
         testName = event.testName
         message = getFullStackTrace(event)
         finishTime = event.timeStamp
         status =  Status.FAILED
-      }
-      case event: TestSucceeded => {
+
+      case event: TestSucceeded =>
         testName = event.testName
         finishTime = event.timeStamp
-        message = "test succeed"
         status =  Status.PASSED
-      }
 
-      case event: TestPending => {
+      case event: TestPending =>
         testName = event.testName
         finishTime = event.timeStamp
-        message = "test pending"
         status =  Status.QUEUED
-      }
 
-      case event: TestIgnored => {
+      case event: TestIgnored =>
         testName = event.testName
         finishTime = event.timeStamp
-        message = event.testName
         status =  Status.SKIPPED
-      }
 
-      case event: TestCanceled => {
+      case event: TestCanceled =>
         testName = event.testName
         finishTime = event.timeStamp
         message = event.message
         status =  Status.ABORTED
-      }
-
-      case event: SuiteAborted => {
-        testName = event.suiteName
-        finishTime = event.timeStamp
-        message = event.message
-        status =  Status.ABORTED
-      }
 
     }
 
@@ -333,18 +327,20 @@ class ZafiraReporter extends Reporter with Util {
     test.setStatus(status)
     test.setMessage(message)
     test.setFinishTime(finishTime)
-    threadTest.remove
-    threadCiTestId.remove
+    threadTest.remove()
+    threadCiTestId.remove()
     test
   }
+
+  import scala.compat.Platform.EOL
 
   private def getFullStackTrace(event: TestFailed):String = {
     val sb = new StringBuilder
     if (event.throwable.get != null) {
-      sb.append(event.message).append("\n")
+      sb.append(event.message).append(EOL)
       val elems = event.throwable.get.getStackTrace
       for (elem <- elems) {
-        sb.append("\n").append(elem.toString)
+        sb.append(EOL).append(elem.toString)
       }
     }
     if (!StringUtils.isEmpty(sb.toString)) {
