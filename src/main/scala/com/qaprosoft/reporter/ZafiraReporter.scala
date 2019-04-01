@@ -17,7 +17,6 @@ import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
 import com.qaprosoft.zafira.models.db.Status
-import org.apache.commons.configuration2.PropertiesConfiguration
 
 class ZafiraReporter extends Reporter with Util {
 
@@ -72,33 +71,6 @@ class ZafiraReporter extends Reporter with Util {
     }
   }
 
-  private def initializeZafira():ZafiraClient = {
-
-    val pr = new PropertiesConfiguration
-    Thread.currentThread().setContextClassLoader(
-    pr.getClass.getClassLoader
-    )
-
-    val zc = new ZafiraClient(ZAFIRA_URL)
-
-    try {
-      if (ZAFIRA_ENABLED) {
-        ZAFIRA_ENABLED = zc.isAvailable
-        if (ZAFIRA_ENABLED) {
-          val auth = zc.refreshToken(ZAFIRA_ACCESS_TOKEN)
-          if (auth.getStatus.equals(200)) zc.setAuthToken(auth.getObject.getType + " " + auth.getObject.getAccessToken)
-          else ZAFIRA_ENABLED = false
-        }
-        LOGGER.info("Zafira is " + (if (ZAFIRA_ENABLED) "available"
-        else "unavailable"))
-
-      }
-    } catch {
-      case e: NoSuchElementException =>
-        LOGGER.error("Unable to find config property: ", e)
-    }
-    zc
-  }
 
   def onStart(event: RunStarting): Unit = {
     // Exit on initialization failure
@@ -313,17 +285,9 @@ class ZafiraReporter extends Reporter with Util {
 
     val threadId = Thread.currentThread.getId
     val test = threadTest.get
-    //testByThread.get(threadId);
-
 
     LOGGER.debug("testName registered with current thread is: " + testName)
     if (test == null) throw new RuntimeException("Unable to find TestType result to mark test as finished! name: '" + testName + "'; threadId: " + threadId)
-    test.setTestMetrics(configurator.getTestMetrics(null))
-    test.setConfigXML(convertToXML(configurator.getConfiguration))
-    test.setArtifacts(configurator.getArtifacts(null))
-    //    var testDetails = "testId: %d; testCaseId: %d; testRunId: %d; name: %s; thread: %s; status: %s, finishTime: %s \n message: %s"
-    //    var logMessage = String.format(testDetails, test.getId, test.getTestCaseId, test.getTestRunId, test.getName, threadId, status, finishTime, message)
-    //   LOGGER.debug("Test details to finish registration:" + logMessage)
     test.setStatus(status)
     test.setMessage(message)
     test.setFinishTime(finishTime)
@@ -346,6 +310,28 @@ class ZafiraReporter extends Reporter with Util {
     }
     else null
 
+  }
+
+  private def initializeZafira():ZafiraClient = {
+    val zc = new ZafiraClient(ZAFIRA_URL)
+
+    try {
+      if (ZAFIRA_ENABLED) {
+        ZAFIRA_ENABLED = zc.isAvailable
+        if (ZAFIRA_ENABLED) {
+          val auth = zc.refreshToken(ZAFIRA_ACCESS_TOKEN)
+          if (auth.getStatus.equals(200)) zc.setAuthToken(auth.getObject.getType + " " + auth.getObject.getAccessToken)
+          else ZAFIRA_ENABLED = false
+        }
+        LOGGER.info("Zafira is " + (if (ZAFIRA_ENABLED) "available"
+        else "unavailable"))
+
+      }
+    } catch {
+      case e: NoSuchElementException =>
+        LOGGER.error("Unable to find config property: ", e)
+    }
+    zc
   }
 
 }

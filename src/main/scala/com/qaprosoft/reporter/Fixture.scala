@@ -107,18 +107,4 @@ trait Fixture extends TestSuite with Util with Driver with WebBrowser {
     outcome
   }
 
-
-
-//  override def beforeAll() = {
-//    // NOTE: Need to run tests in a wide window, to prevent overlapping elements blocking clicking in opportunity list.
-//    LOGGER.info("Setup starting")
-//    webDriver.manage().window().setSize(new org.openqa.selenium.Dimension(1600, 800))
-//    LOGGER.info("Setup complete")
-//  }
-//
-//  override def afterAll() = {
-//    // Close the browser window when the tests are complete
-//    LOGGER.info("Breakdown starting")
-//    LOGGER.info("Breakdown complete")
-//  }
 }
