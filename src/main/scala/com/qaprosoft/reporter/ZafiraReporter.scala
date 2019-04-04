@@ -17,8 +17,11 @@ import com.qaprosoft.zafira.models.dto._
 import javax.xml.bind.{JAXBContext, JAXBException}
 import org.apache.commons.lang3.StringUtils
 import com.qaprosoft.zafira.models.db.Status
+import org.apache.log4j.Logger
 
 class ZafiraReporter extends Reporter with Util {
+
+  val LOGGER = Logger.getLogger(this.getClass)
 
   var parentJob: JobType = _
   var user: UserType = new UserType
@@ -71,44 +74,30 @@ class ZafiraReporter extends Reporter with Util {
     }
   }
 
-
   def onStart(event: RunStarting): Unit = {
-    // Exit on initialization failure
     if (!ZAFIRA_ENABLED) return
     try {
       zafiraClient.initProject(ZAFIRA_PROJECT)
       user = zafiraClient.getUserProfile.getObject
       val suiteOwner = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
-
       suite = zafiraClient.registerTestSuite(SUITE_NAME,SUITE_NAME, suiteOwner.getId)
-
       val job: JobType = zafiraClient.registerJob(ciConfig.getCiUrl, suiteOwner.getId)
-
-      // Register upstream job if required
       var anonymous: UserType = null
       if (BuildCasue.UPSTREAMTRIGGER == ciConfig.getCiBuildCause) {
         anonymous = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
         parentJob = zafiraClient.registerJob(ciConfig.getCiParentUrl, anonymous.getId)
       }
 
-      // Searching for existing test run with same CI run id in case of rerun
       if (!StringUtils.isEmpty(ciConfig.getCiRunId)) {
         val response = zafiraClient.getTestRunByCiRunId(ciConfig.getCiRunId)
         run = response.getObject
       }
       if (run != null) {
-        // Already discovered run with the same CI_RUN_ID, it is re-run functionality!
-        // Reset build number for re-run to map to the latest rerun build
         run.setBuildNumber(ciConfig.getCiBuild)
-
-        // Reset testRun config for rerun in case of queued tests
         run.setConfigXML(convertToXML(configurator.getConfiguration))
-
-        // Re-register test run to reset status onto in progress
-
-        var response = zafiraClient.startTestRun(run)
+        val response = zafiraClient.startTestRun(run)
         run = response.getObject
-        var testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
+        val testRunResults:Array[TestType] = zafiraClient.getTestRunResults(run.getId).getObject
         testRunResults.foreach(test => {
           registeredTests.put(test.getName, test)
         })
@@ -123,7 +112,6 @@ class ZafiraReporter extends Reporter with Util {
           LOGGER.error("Unable to find data in Zafira Reporting Service with CI_RUN_ID: '" + ciConfig.getCiRunId + "'.\n" + "Rerun failures featrure will be disabled!")
           ZAFIRA_RERUN_FAILURES = false
         }
-        // Register new test run
         ciConfig.getCiBuildCause match {
           case BuildCasue.UPSTREAMTRIGGER =>
             run = zafiraClient.registerTestRunUPSTREAM_JOB(suite.getId, convertToXML(configurator.getConfiguration), job.getId, parentJob.getId, ciConfig, Initiator.UPSTREAM_JOB, JIRA_SUITE_ID)
@@ -178,7 +166,8 @@ class ZafiraReporter extends Reporter with Util {
 
   def onFinish(event: RunCompleted): Unit = {
     if (!ZAFIRA_ENABLED) return
-    try { // Reset configuration to store for example updated at run-time app_version etc
+    try {
+      LOGGER.info("run.getJobId " + run.getJobId)
       run.setConfigXML(convertToXML(configurator.getConfiguration))
       zafiraClient.registerTestRunResults(run)
     } catch {
@@ -281,6 +270,24 @@ class ZafiraReporter extends Reporter with Util {
         message = event.message
         status =  Status.ABORTED
 
+      case event: AlertProvided => // do nothing
+      case event: DiscoveryCompleted => // do nothing
+      case event: InfoProvided => // do nothing
+      case event: DiscoveryStarting => // do nothing
+      case event: MarkupProvided => // do nothing
+      case event: RunAborted => // do nothing
+      case event: RunCompleted => // do nothing
+      case event: RunStarting => // do nothing
+      case event: RunStopped => // do nothing
+      case event: ScopeClosed => // do nothing
+      case event: ScopeOpened => // do nothing
+      case event: ScopePending => // do nothing
+      case event: SuiteAborted => // do nothing
+      case event: SuiteCompleted => // do nothing
+      case event: SuiteStarting => // do nothing
+      case event: TestStarting => // do nothing
+      case event: NoteProvided => // do nothing
+
     }
 
     val threadId = Thread.currentThread.getId
@@ -332,6 +339,21 @@ class ZafiraReporter extends Reporter with Util {
         LOGGER.error("Unable to find config property: ", e)
     }
     zc
+  }
+
+  val ciConfig: CIConfig = {
+    val ci = new CIConfig
+    ci.setCiRunId(CI_RUN_ID)
+    ci.setCiUrl(CI_URL)
+    ci.setCiBuild(CI_BUILD)
+    ci.setCiBuildCause(CI_BUILD_CAUSE)
+    ci.setCiParentUrl(CI_PARENT_URL)
+    ci.setCiParentBuild(CI_PARENT_BUILD)
+
+    ci.setGitBranch(GIT_BRANCH)
+    ci.setGitCommit(GIT_COMMIT)
+    ci.setGitUrl(GIT_URL)
+    ci
   }
 
 }

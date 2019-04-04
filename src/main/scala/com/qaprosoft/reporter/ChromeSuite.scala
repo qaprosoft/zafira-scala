@@ -5,6 +5,7 @@ import java.util
 
 import org.apache.commons.pool.PoolableObjectFactory
 import org.apache.commons.pool.impl.GenericObjectPool
+import org.apache.log4j.Logger
 import org.openqa.selenium.{By, WebDriver}
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.{CapabilityType, DesiredCapabilities, LocalFileDetector, RemoteWebDriver}
@@ -13,8 +14,10 @@ import org.scalatest._
 import org.scalatest.selenium.{Driver, WebBrowser}
 
 
-trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndAfterAll with Util with Fixture{
+trait ChromeSuite extends TestSuite with WebBrowser with Driver  with BeforeAndAfterAll {
   this: Suite with WebBrowser with Driver =>
+
+  val LOGGER = Logger.getLogger(this.getClass)
 
   lazy val seleniumGridConfig = seleniumGrid
 
