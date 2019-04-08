@@ -7,10 +7,10 @@ To use the reporter:
 * add this library to your project as dependency
   * SBT
    >      resolvers ++= Seq(
-   >        "Qaprosoft" at ""
+   >        "Qaprosoft" at "https://ci.qaprosoft.com/nexus/content/repositories/snapshots/"
    >      )
    >
-   >      libraryDependencies += "qaprosoft.com" %% "zafira-reporter" % "${version}" % "test"
+   >      libraryDependencies += "qaprosoft.com" %% "zafira-reporter" % "${version}" % Test,
    >
 
   * Maven
@@ -35,6 +35,42 @@ To use the reporter:
   ```scala
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-C", "com.qaprosoft.reporter.ZafiraReporter")
   ```
+  ```scala
+    libraryDependencies += "qaprosoft.com" % "zafira-reporter" % ${version} % Test)
+    ```
 
+In order to post results to the Zafira service you have to specify the following parameters as System properties:
+ ```
+------ Zafira integration ------
 
+zafira_enabled=false/true
+zafira_service_url=
+zafira_access_token=
+zafira_project=
+zafira_rerun_failures=false/true
+zafira_report_emails=false/true
+ ```
+  ```
+ ------ CI integration ------
+ci_url=
+ci_run_id=
+ci_build=
+ci_build_cause=
+ci_parent_url=
+ci_parent_build=
+ci_user_id=
+ci_user_first_name=
+ci_user_last_name=
+ci_user_email=
+ ```
+  ```
+ ------ Git integration ------
+git_branch=
+git_commit=
+git_url=
+ ```
+  ```
+------ JIRA integration ------
+jira_suite_id
+ ```
 

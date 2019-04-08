@@ -3,7 +3,7 @@ name := "zafira-reporter"
 
 organization := "qaprosoft.com"
 
-version := "0.2"
+version := "0.1"
 
 scalaVersion := "2.12.7"
 

@@ -45,32 +45,14 @@ class ZafiraReporter extends Reporter with Util {
       case event: TestStarting => onTestStart(event)
       case event: TestSucceeded => onTestFinish(event)
       case event: TestIgnored => onTestFinish(event)
-      case event: TestPending => onTestFinish(event)
+      case event: TestPending =>  onTestFinish(event)
       case event: TestFailed => onTestFinish(event)
       case event: TestCanceled => onTestFinish(event)
-
-      case event: SuiteStarting =>  println(event.suiteName + "\n...suite starting")
-      case event: SuiteCompleted => println(event.suiteName + "\n...suite completed")
       case event: SuiteAborted => onTestFinish(event)
-
       case event: RunStarting =>  onStart(event)
-      case event: RunStopped => println(event.threadName + "\n...run stopped")
-      case event: RunAborted => println(event.threadName + "\n...run aborted")
       case event: RunCompleted => onFinish(event)
 
-      case event: AlertProvided => println(event.message + "\n...allert provided")
-      case event: InfoProvided => println(event.nameInfo + "\n...info provided")
-      case event: MarkupProvided => println(event.text + "\n...markup provided")
-      case event: NoteProvided => println(event.message + "\n...note provided")
-
-      case event: DiscoveryCompleted => println(event.duration.get + "\n...discovery completed")
-      case event: DiscoveryStarting => println(event.timeStamp + "\n...discovery starting")
-
-      case event: ScopeClosed => println(event.message + "\n...scope closed")
-      case event: ScopeOpened => println(event.message + "\n...scope opened")
-      case event: ScopePending => println(event.message + "\n...scope pending")
-
-      case _ =>
+      case default => LOGGER.info("Event " + event.getClass + " is not supported")
     }
   }
 
@@ -105,6 +87,9 @@ class ZafiraReporter extends Reporter with Util {
           for (test <- testRunResults) {
             if (test.isNeedRerun) testNamesRerun.add(test.getName)
           }
+          LOGGER.info("Tests need rerun " + testNamesRerun.toString)
+          LOGGER.error("Rerun failures functionality is not supported")
+          ZAFIRA_RERUN_FAILURES = false
           }
       }
       else {
@@ -125,13 +110,11 @@ class ZafiraReporter extends Reporter with Util {
         }
       }
 
-      if (run == null) {
-        throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL)
-      }
+      if (run == null) throw new RuntimeException("Unable to register test run for zafira service: " + ZAFIRA_URL)
       else {
         System.setProperty(ZAFIRA_RUN_ID_PARAM, run.getId.toString)
-
       }
+
       Runtime.getRuntime.addShutdownHook(new TestRunShutdownHook(zafiraClient, run))
     } catch {
       case e: Throwable =>
@@ -153,16 +136,6 @@ class ZafiraReporter extends Reporter with Util {
     }
     stringWriter.toString
   }
-
-  class TestRunShutdownHook(var zc: ZafiraClient, var testRun: TestRunType) extends Thread {
-    override def run(): Unit = {
-      if (testRun != null) {
-        val aborted = zc.abortTestRun(testRun.getId)
-        LOGGER.info("TestRunShutdownHook was executed with result: " + aborted)
-      }
-    }
-  }
-
 
   def onFinish(event: RunCompleted): Unit = {
     if (!ZAFIRA_ENABLED) return
@@ -264,23 +237,7 @@ class ZafiraReporter extends Reporter with Util {
         message = event.message
         status =  Status.ABORTED
 
-      case event: AlertProvided => Unit
-      case event: DiscoveryCompleted => Unit
-      case event: InfoProvided => Unit
-      case event: DiscoveryStarting => Unit
-      case event: MarkupProvided => Unit
-      case event: RunAborted => Unit
-      case event: RunCompleted => Unit
-      case event: RunStarting => Unit
-      case event: RunStopped => Unit
-      case event: ScopeClosed => Unit
-      case event: ScopeOpened => Unit
-      case event: ScopePending => Unit
-      case event: SuiteAborted => Unit
-      case event: SuiteCompleted => Unit
-      case event: SuiteStarting => Unit
-      case event: TestStarting => Unit
-      case event: NoteProvided => Unit
+      case default => LOGGER.info("Event " + event.getClass + " is not supported")
 
     }
 
@@ -333,6 +290,16 @@ class ZafiraReporter extends Reporter with Util {
     }
     zc
   }
+
+  class TestRunShutdownHook(var zc: ZafiraClient, var testRun: TestRunType) extends Thread {
+    override def run(): Unit = {
+      if (testRun != null) {
+        val aborted = zc.abortTestRun(testRun.getId)
+        LOGGER.info("TestRunShutdownHook was executed with result: " + aborted)
+      }
+    }
+  }
+
 
 }
 
