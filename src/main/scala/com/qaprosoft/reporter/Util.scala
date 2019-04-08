@@ -2,6 +2,8 @@ package com.qaprosoft.reporter
 
 import java.util.UUID
 
+import com.qaprosoft.zafira.config.CIConfig
+
 trait Util {
 
   var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).toString.toBoolean
@@ -27,5 +29,20 @@ trait Util {
   var GIT_URL = sys.props.getOrElse("git_url", null)
 
   var JIRA_SUITE_ID = sys.props.getOrElse("jira_suite_id", null)
+
+  val ciConfig: CIConfig = {
+    val ci = new CIConfig
+    ci.setCiRunId(CI_RUN_ID)
+    ci.setCiUrl(CI_URL)
+    ci.setCiBuild(CI_BUILD)
+    ci.setCiBuildCause(CI_BUILD_CAUSE)
+    ci.setCiParentUrl(CI_PARENT_URL)
+    ci.setCiParentBuild(CI_PARENT_BUILD)
+
+    ci.setGitBranch(GIT_BRANCH)
+    ci.setGitCommit(GIT_COMMIT)
+    ci.setGitUrl(GIT_URL)
+    ci
+  }
 
 }

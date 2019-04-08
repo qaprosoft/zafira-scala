@@ -167,7 +167,6 @@ class ZafiraReporter extends Reporter with Util {
   def onFinish(event: RunCompleted): Unit = {
     if (!ZAFIRA_ENABLED) return
     try {
-      LOGGER.info("run.getJobId " + run.getJobId)
       run.setConfigXML(convertToXML(configurator.getConfiguration))
       zafiraClient.registerTestRunResults(run)
     } catch {
@@ -183,20 +182,15 @@ class ZafiraReporter extends Reporter with Util {
       var startedTest:TestType = null
       val testName = event.testName
 
-      // If method owner is not specified then try to use suite owner. If both are not declared then ANONYMOUS will be used.
-      val primaryOwnerName:String = zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER).getUsername
       val primaryOwner: UserType= zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
 
-      val secondaryOwnerName:String  =  zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER).getUsername
       val secondaryOwner: UserType =  zafiraClient.getUserOrAnonymousIfNotFound(ZafiraClient.DEFAULT_USER)
       val testClass = event.suiteClassName.get
       val testMethod = event.testName
 
       val testCase:TestCaseType = zafiraClient.registerTestCase(suite.getId, primaryOwner.getId, secondaryOwner.getId,testClass, testMethod)
-      // Search already registered test!
             if (registeredTests.containsKey(testName)) {
               startedTest = registeredTests.get(testName)
-              // Skip already passed tests if rerun failures enabled
               if (ZAFIRA_RERUN_FAILURES && !startedTest.isNeedRerun) throw new RuntimeException("ALREADY_PASSED: " + testName)
               startedTest.setFinishTime(event.timeStamp)
               startedTest.setStartTime(new Date().getTime)
@@ -270,23 +264,23 @@ class ZafiraReporter extends Reporter with Util {
         message = event.message
         status =  Status.ABORTED
 
-      case event: AlertProvided => // do nothing
-      case event: DiscoveryCompleted => // do nothing
-      case event: InfoProvided => // do nothing
-      case event: DiscoveryStarting => // do nothing
-      case event: MarkupProvided => // do nothing
-      case event: RunAborted => // do nothing
-      case event: RunCompleted => // do nothing
-      case event: RunStarting => // do nothing
-      case event: RunStopped => // do nothing
-      case event: ScopeClosed => // do nothing
-      case event: ScopeOpened => // do nothing
-      case event: ScopePending => // do nothing
-      case event: SuiteAborted => // do nothing
-      case event: SuiteCompleted => // do nothing
-      case event: SuiteStarting => // do nothing
-      case event: TestStarting => // do nothing
-      case event: NoteProvided => // do nothing
+      case event: AlertProvided => Unit
+      case event: DiscoveryCompleted => Unit
+      case event: InfoProvided => Unit
+      case event: DiscoveryStarting => Unit
+      case event: MarkupProvided => Unit
+      case event: RunAborted => Unit
+      case event: RunCompleted => Unit
+      case event: RunStarting => Unit
+      case event: RunStopped => Unit
+      case event: ScopeClosed => Unit
+      case event: ScopeOpened => Unit
+      case event: ScopePending => Unit
+      case event: SuiteAborted => Unit
+      case event: SuiteCompleted => Unit
+      case event: SuiteStarting => Unit
+      case event: TestStarting => Unit
+      case event: NoteProvided => Unit
 
     }
 
@@ -316,7 +310,6 @@ class ZafiraReporter extends Reporter with Util {
       sb.toString
     }
     else null
-
   }
 
   private def initializeZafira():ZafiraClient = {
@@ -339,21 +332,6 @@ class ZafiraReporter extends Reporter with Util {
         LOGGER.error("Unable to find config property: ", e)
     }
     zc
-  }
-
-  val ciConfig: CIConfig = {
-    val ci = new CIConfig
-    ci.setCiRunId(CI_RUN_ID)
-    ci.setCiUrl(CI_URL)
-    ci.setCiBuild(CI_BUILD)
-    ci.setCiBuildCause(CI_BUILD_CAUSE)
-    ci.setCiParentUrl(CI_PARENT_URL)
-    ci.setCiParentBuild(CI_PARENT_BUILD)
-
-    ci.setGitBranch(GIT_BRANCH)
-    ci.setGitCommit(GIT_COMMIT)
-    ci.setGitUrl(GIT_URL)
-    ci
   }
 
 }
