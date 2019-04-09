@@ -10,14 +10,14 @@ To use the reporter:
    >        "Qaprosoft" at "https://ci.qaprosoft.com/nexus/content/repositories/snapshots/"
    >      )
    >
-   >      libraryDependencies += "qaprosoft.com" %% "zafira-reporter" % "${version}" % Test,
+   >      libraryDependencies += "com.qaprosoft" %% "zafira-scala" % "${version}" % Test,
    >
 
   * Maven
    >
    >      <dependency>
-   >        <groupId>qaprosoft.com</groupId>
-   >        <artifactId>zafira-reporter</artifactId>
+   >        <groupId>com.qaprosoft</groupId>
+   >        <artifactId>zafira-scala</artifactId>
    >        <version>${version}</version>
    >        <scope>test</scope>
    >      </dependency>
@@ -36,7 +36,7 @@ To use the reporter:
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-C", "com.qaprosoft.reporter.ZafiraReporter")
   ```
   ```scala
-    libraryDependencies += "qaprosoft.com" % "zafira-reporter" % ${version} % Test)
+    libraryDependencies += "com.qaprosoft" % "zafira-scala" % ${version} % Test)
     ```
 
 In order to post results to the Zafira service you have to specify the following parameters as System properties:
