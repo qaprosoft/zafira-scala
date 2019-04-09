@@ -1,13 +1,25 @@
-name := "zafira-scala"
 
-version := "0.1"
+name := "zafira-reporter"
 
-scalaVersion := "2.12.6"
+organization := "qaprosoft.com"
+
+version := "0.2"
+
+scalaVersion := "2.12.7"
 
 libraryDependencies ++= Seq(
-    "com.qaprosoft" % "zafira-client" % "3.0.36",
-    "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test",
-    "com.sun.jersey" % "jersey-core" % "1.19",
-    "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime,
-    "com.typesafe" % "config" % "1.2.1"
+  "org.scalatest" %% "scalatest" % "3.0.5",
+  "com.qaprosoft" % "zafira-client" % "3.3.51",
+  "commons-beanutils" % "commons-beanutils" % "1.9.3",
+  "log4j" % "log4j" % "1.2.12",
+  "org.slf4j" % "slf4j-api" % "1.7.5",
+  "org.slf4j" % "jcl-over-slf4j" % "1.7.5",
+  "org.slf4j" % "slf4j-simple" % "1.7.5",
+  "com.sun.jersey" % "jersey-core" % "1.19.4",
+  "com.google.guava".%("guava") % "19.0",
+  "org.apache.commons" % "commons-configuration2" % "2.1",
+  "javax.mail" % "mail" % "1.4.7",
+  "javax.mail" % "javax.mail-api" % "1.5.5",
+  "commons-io" % "commons-io" % "2.6"
+
 )
