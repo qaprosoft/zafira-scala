@@ -32,4 +32,9 @@ publishTo := {
     Some("releases"  at nexus + "content/repositories/releases")
 }
 
-credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+val username = sys.props.getOrElse("username", null)
+val password = sys.props.getOrElse("password", null)
+val realm = sys.props.getOrElse("realm", null)
+val host = sys.props.getOrElse("host", null)
+
+credentials += Credentials(realm, host, username, password)
