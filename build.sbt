@@ -1,7 +1,7 @@
 
-name := "zafira-reporter"
+name := "zafira-scala"
 
-organization := "qaprosoft.com"
+organization := "com.qaprosoft"
 
 version := "0.2-SNAPSHOT"
 
