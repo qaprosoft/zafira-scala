@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.qaprosoft.zafira.config.CIConfig
 
-trait Util {
+trait Constants {
 
   var ZAFIRA_ENABLED = sys.props.getOrElse("zafira_enabled", true).toString.toBoolean
   val ZAFIRA_URL = sys.props.getOrElse("zafira_service_url", "http://localhost:8080/job/unavailable")

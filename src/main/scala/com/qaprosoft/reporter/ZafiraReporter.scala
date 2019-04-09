@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils
 import com.qaprosoft.zafira.models.db.Status
 import org.apache.log4j.Logger
 
-class ZafiraReporter extends Reporter with Util {
+class ZafiraReporter extends Reporter with Constants {
 
   val LOGGER = Logger.getLogger(this.getClass)
 
