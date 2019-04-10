@@ -32,3 +32,4 @@ val host = sys.props.getOrElse("host", null)
 credentials += Credentials(realm, host, username, password)
 
 publishTo := Some("Sonatype Nexus Repository Manager" at "https://ci.qaprosoft.com/nexus/content/repositories/snapshots")
+
