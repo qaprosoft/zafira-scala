@@ -3,7 +3,7 @@ name := "zafira-scala"
 
 organization := "com.qaprosoft"
 
-version := "0.2-SNAPSHOT"
+version := "0.3-SNAPSHOT"
 
 scalaVersion := "2.12.7"
 
@@ -24,17 +24,11 @@ libraryDependencies ++= Seq(
 
 )
 
-publishTo := {
-  val nexus = "https://ci.qaprosoft.com/nexus/"
-  if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "content/repositories/releases")
-}
-
 val username = sys.props.getOrElse("username", null)
 val password = sys.props.getOrElse("password", null)
 val realm = sys.props.getOrElse("realm", null)
 val host = sys.props.getOrElse("host", null)
 
 credentials += Credentials(realm, host, username, password)
+
+publishTo := Some("Sonatype Nexus Repository Manager" at "https://ci.qaprosoft.com/nexus/content/repositories/snapshots")
