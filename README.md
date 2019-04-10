@@ -36,7 +36,7 @@ To use the reporter:
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-C", "com.qaprosoft.reporter.ZafiraReporter")
   ```
   ```scala
-    libraryDependencies += "com.qaprosoft" % "zafira-scala" % ${version} % Test)
+    libraryDependencies += "com.qaprosoft" %% "zafira-scala" % ${version} % Test)
     ```
 
 In order to post results to the Zafira service you have to specify the following parameters as System properties:
