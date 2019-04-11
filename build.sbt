@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
 )
 
 credentials += Credentials(
-  sys.props.getOrElse("realm", null),
+  sys.props.getOrElse("realm", "Sonatype Nexus Repository Manager"),
   sys.props.getOrElse("host", null),
   sys.props.getOrElse("username", null),
   sys.props.getOrElse("password", null)
