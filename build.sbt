@@ -24,12 +24,11 @@ libraryDependencies ++= Seq(
 
 )
 
-val username = sys.props.getOrElse("username", null)
-val password = sys.props.getOrElse("password", null)
-val realm = sys.props.getOrElse("realm", null)
-val host = sys.props.getOrElse("host", null)
-
-credentials += Credentials(realm, host, username, password)
+credentials += Credentials(
+  sys.props.getOrElse("realm", null),
+  sys.props.getOrElse("host", null),
+  sys.props.getOrElse("username", null),
+  sys.props.getOrElse("password", null)
+)
 
 publishTo := Some("Sonatype Nexus Repository Manager" at "https://ci.qaprosoft.com/nexus/content/repositories/snapshots")
-
